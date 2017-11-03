@@ -1,11 +1,11 @@
 test:
 	make build;
-	./game;
+	./game2;
 
 build:
-	gcc -I"/usr/include/SDL2" -c game.c;
-	gcc game.o -lSDL2 -o game;
+	gcc -I"/usr/include/SDL2" -c game2.c;
+	gcc game2.o -lSDL2 -o game2;
 
 clean:
-	-rm game.o;
-	-rm game;
+	-rm game2.o;
+	-rm game2;
