@@ -3,8 +3,9 @@ test:
 	./game2;
 
 build:
-	gcc -I"/usr/include/SDL2" -c game2.c;
-	gcc game2.o -lSDL2 -o game2;
+	rm -rf game2
+	gcc -c `sdl2-config --cflags` game2.c;
+	gcc game2.o `sdl2-config --libs` -lSDL2_image -o game2;
 
 clean:
 	-rm game2.o;
