@@ -1,0 +1,2 @@
+void move();
+void initShip();

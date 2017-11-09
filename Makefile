@@ -1,12 +1,13 @@
 test:
 	make build;
-	./game2;
+	./spacegame;
 
 build:
-	rm -rf game2
-	gcc -c `sdl2-config --cflags` game2.c;
-	gcc game2.o `sdl2-config --libs` -lSDL2_image -o game2;
+	rm -rf spacegame;
+	gcc -c `sdl2-config --cflags` *.c;
+	gcc *.o `sdl2-config --libs` -lSDL2_image -o spacegame;
 
 clean:
-	-rm game2.o;
-	-rm game2;
+	-rm *.o;
+	-rm spacegame;
+	make
