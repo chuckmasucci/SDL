@@ -1,2 +1,2 @@
 void move();
-void initShip();
+void initializePlayer();

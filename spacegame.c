@@ -5,40 +5,16 @@
 #include "player.h"
 #include "gfx.h"
 
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
-
-int init;
-SDL_Window *window;
-SDL_Renderer *renderer;
+int running = 1;
 
 int main(int argc, char *argv[])
 {
-    SDL_Texture *texture;
+    // Start graphics
+    initializeGfx();
 
-    init = SDL_Init(SDL_INIT_VIDEO);
-    check(init >= 0, "Could not initialize SDL: %s", SDL_GetError());
+    // Initialize player
+    initializePlayer();
 
-    IMG_Init(IMG_INIT_PNG);
-
-    window = SDL_CreateWindow("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
-    check(window != NULL, "Could not create window: %s", SDL_GetError());
-
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    check(renderer != NULL, "Could not create renderer: %s", SDL_GetError());
-
-    SDL_Rect scaledRect;
-    scaledRect.x = (WINDOW_WIDTH / 2) - (162 / 2),  scaledRect.y = WINDOW_HEIGHT - 216 - 20,
-    scaledRect.w = 162, scaledRect.h = 216;
-
-    SDL_RenderClear(renderer);
-
-    texture = createSpriteTexture(renderer, "gfx/F5S2.png");
-    setTexture(renderer, texture, scaledRect);
-
-    move();
-
-    int running = 1;
     while(running) {
         SDL_Event event;
         if(SDL_PollEvent(&event)) {
@@ -46,13 +22,12 @@ int main(int argc, char *argv[])
                 case SDL_KEYDOWN:
                     switch(event.key.keysym.sym) {
                         case SDLK_LEFT:
-                            scaledRect.x -= 10;
+                            move(-1);
                             break;
                         case SDLK_RIGHT:
-                            scaledRect.x += 10;
+                            move(1);
                             break;
                         case SDLK_ESCAPE:
-                            debug("escape");
                             running = 0;
                             break;
                     }
@@ -62,12 +37,6 @@ int main(int argc, char *argv[])
             if(event.type == SDL_QUIT) {
                 break;
             }
-
-            setTexture(renderer, texture, scaledRect);
         }
     }
-
-error:
-    SDL_Quit();
-    log_err("SDL Error: Shutdown");
 }
