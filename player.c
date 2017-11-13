@@ -35,3 +35,18 @@ void move(int direction) {
     }
     setTexture(renderer, shipSprite, ship);
 }
+
+
+SDL_Texture *shoot() {
+    SDL_Texture *bulletSprite = createSpriteTexture(renderer, BULLET_SPRITE);
+    SDL_Rect bullet;
+    bullet.x = 0;
+    bullet.y = 0;
+
+    SDL_QueryTexture(bulletSprite, NULL, NULL, &bullet.w, &bullet.h);
+    bullet.w /= 4; // TODO: make this a const
+    debug("bullet.w: %d", bullet.w);
+    debug("bullet.h: %d", bullet.h);
+
+    return bulletSprite;
+}

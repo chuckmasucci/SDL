@@ -29,6 +29,9 @@ int main(int argc, char *argv[])
     // Initialize player
     initializePlayer();
 
+    // Test
+    SDL_Texture *bullet = shoot();
+
     // The loop
     while(running) {
         // Timing variables
@@ -82,6 +85,12 @@ int main(int argc, char *argv[])
         } else if(isRightKeyDown) {
             move(moveDirection);
         }
+
+        /*int frames = 4;*/
+        /*int frameDelay = 100;*/
+        /*int frame = (SDL_GetTicks() / frameDelay) % frames;*/
+        /*setTexture(renderer, bullet, */
+        /*debug("frame: %d", frame);*/
     }
 
     return 0;

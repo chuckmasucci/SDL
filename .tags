@@ -1,7 +1,8 @@
+BULLET_SPRITE	player.h	7;"	d
 FRAMERATE	spacegame.c	8;"	d	file:
-SHIP_HEIGHT	player.h	4;"	d
-SHIP_SPRITE	player.h	2;"	d
-SHIP_WIDTH	player.h	3;"	d
+SHIP_HEIGHT	player.h	6;"	d
+SHIP_SPRITE	player.h	4;"	d
+SHIP_WIDTH	player.h	5;"	d
 createSpriteTexture	gfx.c	/^SDL_Texture *createSpriteTexture(SDL_Renderer *renderer, char *imgPath)$/;"	f
 initializeGfx	gfx.c	/^int initializeGfx() {$/;"	f
 initializePlayer	player.c	/^void initializePlayer() {$/;"	f
@@ -11,3 +12,4 @@ running	spacegame.c	/^int running = 1;$/;"	v
 setTexture	gfx.c	/^void setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect scaledRect)$/;"	f
 ship	player.c	/^SDL_Rect ship;$/;"	v
 shipSprite	player.c	/^SDL_Texture *shipSprite;$/;"	v
+shoot	player.c	/^SDL_Texture *shoot() {$/;"	f
