@@ -6,25 +6,32 @@
 #include "gfx.h"
 
 SDL_Rect ship;
-SDL_Texture *texture;
+SDL_Texture *shipSprite;
 
 void initializePlayer() {
-    ship.x = (WINDOW_WIDTH / 2) - (162 / 2),  ship.y = WINDOW_HEIGHT - 216 - 20,
-    ship.w = 162, ship.h = 216;
+    ship.x = (WINDOW_WIDTH / 2) - (SHIP_WIDTH / 2),  ship.y = WINDOW_HEIGHT - SHIP_HEIGHT - 20,
+    ship.w = SHIP_WIDTH, ship.h = SHIP_HEIGHT;
 
     SDL_RenderClear(renderer);
 
-    texture = createSpriteTexture(renderer, "gfx/F5S2.png");
-    setTexture(renderer, texture, ship);
+    shipSprite = createSpriteTexture(renderer, SHIP_SPRITE);
+    setTexture(renderer, shipSprite, ship);
 }
 
-// -1 = left, 1 = right
 void move(int direction) {
+    // -1 = left, 1 = right
     if(direction < 0) {
-        ship.x -= 10;
+        if(ship.x > 0) {
+            ship.x -= 1;
+        } else {
+            ship.x = 0;
+        }
     } else if(direction > 0) {
-        ship.x += 10;
+        if(ship.x < WINDOW_WIDTH - ship.w) {
+            ship.x += 1;
+        } else {
+            ship.x = WINDOW_WIDTH - ship.w;
+        }
     }
-
-    setTexture(renderer, texture, ship);
+    setTexture(renderer, shipSprite, ship);
 }
