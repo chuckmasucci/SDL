@@ -10,4 +10,6 @@ SDL_Renderer *renderer;
 
 int initializeGfx();
 SDL_Texture *createSpriteTexture(SDL_Renderer *renderer, char *imgPath);
-void setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect scaledRect);
+void clear();
+void setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *destRect);
+void present();

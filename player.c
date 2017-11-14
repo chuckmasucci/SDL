@@ -6,16 +6,33 @@
 #include "gfx.h"
 
 SDL_Rect ship;
+SDL_Rect bullet;
 SDL_Texture *shipSprite;
+SDL_Texture *bulletSprite;
+SDL_Rect shipMask;
+SDL_Rect bulletMask;
 
 void initializePlayer() {
-    ship.x = (WINDOW_WIDTH / 2) - (SHIP_WIDTH / 2),  ship.y = WINDOW_HEIGHT - SHIP_HEIGHT - 20,
-    ship.w = SHIP_WIDTH, ship.h = SHIP_HEIGHT;
-
-    SDL_RenderClear(renderer);
-
+    // Ship
     shipSprite = createSpriteTexture(renderer, SHIP_SPRITE);
-    setTexture(renderer, shipSprite, ship);
+    ship.x = (WINDOW_WIDTH / 2) - (SHIP_WIDTH / 2);
+    ship.y = WINDOW_HEIGHT - SHIP_HEIGHT - 20;
+    ship.w = SHIP_WIDTH;
+    ship.h = SHIP_HEIGHT;
+
+    // Bullet
+    bulletSprite = createSpriteTexture(renderer, BULLET_SPRITE);
+    SDL_QueryTexture(bulletSprite, NULL, NULL, &bullet.w, &bullet.h);
+
+    bulletMask.x = 0;
+    bulletMask.y = 60;
+    bulletMask.w = 10;
+    bulletMask.h = 20;
+
+    bullet.x = ship.x;
+    bullet.y = ship.y;
+    bullet.w = 10;
+    bullet.h = 20;
 }
 
 void move(int direction) {
@@ -33,20 +50,17 @@ void move(int direction) {
             ship.x = WINDOW_WIDTH - ship.w;
         }
     }
-    setTexture(renderer, shipSprite, ship);
 }
 
+void render() {
+    int frames = 4;
+    int frameDelay = 100;
+    int frame = (SDL_GetTicks() / frameDelay) % frames;
 
-SDL_Texture *shoot() {
-    SDL_Texture *bulletSprite = createSpriteTexture(renderer, BULLET_SPRITE);
-    SDL_Rect bullet;
-    bullet.x = 0;
-    bullet.y = 0;
+    bulletMask.y = frame * 20;
 
-    SDL_QueryTexture(bulletSprite, NULL, NULL, &bullet.w, &bullet.h);
-    bullet.w /= 4; // TODO: make this a const
-    debug("bullet.w: %d", bullet.w);
-    debug("bullet.h: %d", bullet.h);
-
-    return bulletSprite;
+    clear();
+    setTexture(renderer, shipSprite, NULL, &ship);
+    setTexture(renderer, bulletSprite, &bulletMask, &bullet);
+    present();
 }

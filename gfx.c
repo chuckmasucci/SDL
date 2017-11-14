@@ -41,9 +41,14 @@ error:
     return NULL;
 }
 
-void setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect scaledRect)
-{
+void clear() {
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, texture, NULL, &scaledRect);
+}
+
+void setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *destRect) {
+    SDL_RenderCopy(renderer, texture, srcRect, destRect);
+}
+
+void present() {
     SDL_RenderPresent(renderer);
 }
