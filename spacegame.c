@@ -17,11 +17,10 @@ int main(int argc, char *argv[])
     int moveDirection = 10;
 
     // Initialize timing variables
-    Uint64 freq;
+    float freq;
     Uint64 now;
     Uint64 lastTime = SDL_GetPerformanceCounter();
-    Uint64 secs;
-    Uint64 delay;
+    float delta;
 
     // Start graphics
     initializeGfx();
@@ -34,9 +33,7 @@ int main(int argc, char *argv[])
         // Timing variables
         freq = SDL_GetPerformanceFrequency();
         now = SDL_GetPerformanceCounter();
-        secs = (now - lastTime) / freq;
-        delay = FRAMERATE - secs * 1000;
-        SDL_Delay(delay);
+        delta = ((now - lastTime) / freq);
 
         SDL_Event event;
         if(SDL_PollEvent(&event)) {
@@ -78,9 +75,9 @@ int main(int argc, char *argv[])
 
         // Determine if movement key is pressed and move the player
         if(isLeftKeyDown) {
-            move(moveDirection);
+            move(moveDirection, delta);
         } else if(isRightKeyDown) {
-            move(moveDirection);
+            move(moveDirection, delta);
         }
 
         render();

@@ -5,6 +5,8 @@
 #include "player.h"
 #include "gfx.h"
 
+#define MOVEMENT_SPEED 200
+
 SDL_Rect ship;
 SDL_Rect bullet;
 SDL_Texture *shipSprite;
@@ -29,23 +31,24 @@ void initializePlayer() {
     bulletMask.w = 10;
     bulletMask.h = 20;
 
-    bullet.x = ship.x;
-    bullet.y = ship.y;
+    bullet.x = ship.x + (ship.w / 2) + 3;
+    bullet.y = ship.y + ship.h - 4;
     bullet.w = 10;
     bullet.h = 20;
 }
 
-void move(int direction) {
+void move(int direction, float delta) {
     // -1 = left, 1 = right
+    float speed = MOVEMENT_SPEED * delta;
     if(direction < 0) {
         if(ship.x > 0) {
-            ship.x -= 1;
+            ship.x -= (int)speed;
         } else {
             ship.x = 0;
         }
     } else if(direction > 0) {
         if(ship.x < WINDOW_WIDTH - ship.w) {
-            ship.x += 1;
+            ship.x += (int)speed;
         } else {
             ship.x = WINDOW_WIDTH - ship.w;
         }

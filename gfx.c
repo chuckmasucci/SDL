@@ -10,7 +10,7 @@ int initializeGfx() {
     window = SDL_CreateWindow("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
     check(window != NULL, "Could not create window: %s", SDL_GetError());
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     check(renderer != NULL, "Could not create renderer: %s", SDL_GetError());
 
     return 0;
