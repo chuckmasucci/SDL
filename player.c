@@ -4,6 +4,7 @@
 #include "dbg.h"
 #include "player.h"
 #include "gfx.h"
+#include "sprite.h"
 
 #define MOVEMENT_SPEED 200
 

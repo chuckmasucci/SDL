@@ -2,7 +2,7 @@ BULLET_HEIGHT	player.h	10;"	d
 BULLET_SPRITE	player.h	8;"	d
 BULLET_WIDTH	player.h	9;"	d
 FRAMERATE	spacegame.c	8;"	d	file:
-MOVEMENT_SPEED	player.c	8;"	d	file:
+MOVEMENT_SPEED	player.c	9;"	d	file:
 SHIP_HEIGHT	player.h	6;"	d
 SHIP_SPRITE	player.h	4;"	d
 SHIP_WIDTH	player.h	5;"	d
@@ -13,7 +13,7 @@ bullet	player.c	/^SDL_Rect bullet;$/;"	v
 bulletMask	player.c	/^SDL_Rect bulletMask;$/;"	v
 bulletSprite	player.c	/^SDL_Texture *bulletSprite;$/;"	v
 clear	gfx.c	/^void clear() {$/;"	f
-createSpriteTexture	gfx.c	/^SDL_Texture *createSpriteTexture(SDL_Renderer *renderer, char *imgPath)$/;"	f
+createSpriteTexture	sprite.c	/^SDL_Texture *createSpriteTexture(SDL_Renderer *renderer, char *imgPath)$/;"	f
 delta	spacegame.h	/^float delta;$/;"	v
 frames	sprite.h	/^    int frames;$/;"	m	struct:sprite
 initializeGfx	gfx.c	/^int initializeGfx() {$/;"	f
