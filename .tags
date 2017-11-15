@@ -21,6 +21,7 @@ initializePlayer	player.c	/^void initializePlayer() {$/;"	f
 main	spacegame.c	/^int main(int argc, char *argv[])$/;"	f
 mask	sprite.h	/^    SDL_Rect mask;$/;"	m	struct:sprite
 move	player.c	/^void move(int direction, float delta) {$/;"	f
+path	sprite.h	/^    char *path;$/;"	m	struct:sprite
 present	gfx.c	/^void present() {$/;"	f
 render	player.c	/^void render() {$/;"	f
 renderer	gfx.h	/^SDL_Renderer *renderer;$/;"	v

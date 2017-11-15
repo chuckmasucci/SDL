@@ -2,6 +2,7 @@
 SDL_Texture *createSpriteTexture(SDL_Renderer *renderer, char *imgPath);
 
 typedef struct sprite {
+    char *path;
     SDL_Rect size;
     SDL_Rect mask;
     int frames;
