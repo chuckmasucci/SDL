@@ -15,7 +15,6 @@
 #define BULLET_HEIGHT 80
 
 // Declarations
-Sprite playerSprite;
 void initializePlayer();
 void move(int direction, float delta);
 void shoot();

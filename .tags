@@ -10,7 +10,7 @@ FRAMERATE	spacegame.c	8;"	d	file:
 FRAMERATE	src/spacegame.c	10;"	d	file:
 LIB_TARGET	Makefile	/^LIB_TARGET=build\/linkedlist.a$/;"	m
 List_count	src/libs/list.c	/^int List_count(Node *headRef)$/;"	f
-List_push	src/libs/list.c	/^void List_push(struct Node **headRef, void *newData)$/;"	f
+List_push	src/libs/list.c	/^void List_push(struct Node **headRef, void *newData, char *name)$/;"	f
 List_remove	src/libs/list.c	/^void List_remove(struct Node **headRef, void *data)$/;"	f
 MOVEMENT_SPEED	player.c	9;"	d	file:
 MOVEMENT_SPEED	src/player.c	9;"	d	file:
@@ -30,13 +30,18 @@ Sprite	src/sprite.h	/^} Sprite;$/;"	t	typeref:struct:sprite
 TARGET	Makefile	/^TARGET=bin\/spacegame$/;"	m
 WINDOW_HEIGHT	gfx.h	6;"	d
 WINDOW_WIDTH	gfx.h	5;"	d
-addToRender	src/render.c	/^void addToRender(Sprite sprite)$/;"	f
+addToRender	src/render.c	/^void addToRender(Sprite *sprite, char *name)$/;"	f
 bullet	player.c	/^SDL_Rect bullet;$/;"	v
+bullet	src/player.c	/^SDL_Rect bullet = {$/;"	v
 bulletMask	player.c	/^SDL_Rect bulletMask;$/;"	v
+bulletMask	src/player.c	/^SDL_Rect bulletMask;$/;"	v
 bulletSprite	player.c	/^SDL_Texture *bulletSprite;$/;"	v
+bulletSprite	src/player.c	/^Sprite bulletSprite;$/;"	v
 clear	gfx.c	/^void clear() {$/;"	f
 createSprite	sprite.c	/^Sprite createSprite(char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask) {$/;"	f
+createSprite	src/sprite.c	/^Sprite *createSprite(Sprite *sp, char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask) {$/;"	f
 createSpriteTexture	sprite.c	/^SDL_Texture *createSpriteTexture(SDL_Renderer *renderer, char *imgPath)$/;"	f
+createSpriteTexture	src/sprite.c	/^SDL_Texture *createSpriteTexture(SDL_Renderer *renderer, char *imgPath)$/;"	f
 currentIndex	src/render.c	/^Node *currentIndex = NULL;$/;"	v
 data	src/libs/list.h	/^    void *data;$/;"	m	struct:Node
 delta	spacegame.h	/^float delta;$/;"	v
@@ -52,12 +57,13 @@ mask	sprite.h	/^    SDL_Rect *mask;$/;"	m	struct:sprite
 mask	src/sprite.h	/^    SDL_Rect *mask;$/;"	m	struct:sprite
 move	player.c	/^void move(int direction, float delta) {$/;"	f
 move	src/player.c	/^void move(int direction, float delta) {$/;"	f
+name	src/libs/list.h	/^    char *name;$/;"	m	struct:Node
 next	src/libs/list.h	/^    struct Node *next;$/;"	m	struct:Node	typeref:struct:Node::Node
 path	sprite.h	/^    char *path;$/;"	m	struct:sprite
 path	src/sprite.h	/^    char *path;$/;"	m	struct:sprite
+player	src/player.c	/^SDL_Rect player = {$/;"	v
 playerMask	src/player.c	/^SDL_Rect playerMask;$/;"	v
 playerSprite	src/player.c	/^Sprite playerSprite;$/;"	v
-playerSprite	src/player.h	/^Sprite playerSprite;$/;"	v
 player_h	src/player.h	2;"	d
 present	gfx.c	/^void present() {$/;"	f
 render	player.c	/^void render() {$/;"	f
@@ -69,7 +75,6 @@ renderer	gfx.h	/^SDL_Renderer *renderer;$/;"	v
 running	spacegame.c	/^int running = 1;$/;"	v
 setTexture	gfx.c	/^void setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *destRect) {$/;"	f
 ship	player.c	/^SDL_Rect ship;$/;"	v
-ship	src/player.c	/^SDL_Rect ship = {$/;"	v
 shipMask	player.c	/^SDL_Rect shipMask;$/;"	v
 shipSprite	player.c	/^Sprite shipSprite;$/;"	v
 size	sprite.h	/^    SDL_Rect *size;$/;"	m	struct:sprite

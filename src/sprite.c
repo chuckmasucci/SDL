@@ -5,14 +5,13 @@
 #include "sprite.h"
 #include "gfx.h"
 
-Sprite createSprite(char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask) {
-    Sprite sp;
-    sp.frames = frames;
-    sp.path = path;
-    sp.visible = 1;
-    sp.size = size;
-    sp.mask = mask;
-    sp.texture = createSpriteTexture(renderer, path);
+Sprite *createSprite(Sprite *sp, char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask) {
+    sp->frames = frames;
+    sp->path = path;
+    sp->visible = 1;
+    sp->size = size;
+    sp->mask = mask;
+    sp->texture = createSpriteTexture(renderer, path);
     return sp;
 }
 

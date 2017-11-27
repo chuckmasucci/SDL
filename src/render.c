@@ -8,9 +8,12 @@ Node *renderQueue = NULL;
 Node *currentIndex = NULL;
 Sprite *renderItem = NULL;
 
-void addToRender(Sprite sprite)
+void addToRender(Sprite *sprite, char *name)
 {
-    List_push(&renderQueue, &sprite);
+    List_push(&renderQueue, &sprite, name);
+    debug("Added sprite: %s", name);
+    debug("List count: %d", List_count(renderQueue));
+    debug("Sprite path: %s", (char*)sprite->path);
 }
 
 void render()
@@ -21,9 +24,12 @@ void render()
 
     clear();
     for(int i = 0; i < List_count(renderQueue); i++) {
-        renderItem = renderQueue->data;
-        setTexture(renderer, playerSprite.texture, NULL, playerSprite.size);
-        currentIndex = renderQueue->next;
+        renderItem = (Sprite*)&renderQueue->data;
+        /*debug("i: %d", i);*/
+        debug("Path: %s", (char*)renderItem->path);
+        /*debug("size w: %d", renderItem->size->w);*/
+        /*setTexture(renderer, renderItem->texture, NULL, renderItem->size);*/
+        /*currentIndex = currentIndex->next;*/
     }
     present();
 }
