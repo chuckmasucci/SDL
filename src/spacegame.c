@@ -4,13 +4,22 @@
 #include "dbg.h"
 #include "player.h"
 #include "gfx.h"
+#include "render.h"
+#include "libs/list.h"
 
 #define FRAMERATE 5
 
-int running = 1;
-
 int main(int argc, char *argv[])
 {
+    Node *head = NULL;
+    char *str1 = "String 1";
+    char *str2 = "String 2";
+    List_push(&head, str1);
+    List_push(&head, str2);
+    debug("head 1: %s", (char*)head->data);
+    debug("head 2: %s", (char*)head->next->data);
+    int running = 1;
+
     // Initialize movement variables
     int isLeftKeyDown = 0;
     int isRightKeyDown = 0;

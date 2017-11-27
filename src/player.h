@@ -1,4 +1,9 @@
+#ifndef player_h
+#define player_h
+#endif
+
 #include <SDL2/SDL.h>
+#include "sprite.h"
 
 // Ship data
 #define SHIP_SPRITE "gfx/sprites/ship.proto1.png"
@@ -10,7 +15,7 @@
 #define BULLET_HEIGHT 80
 
 // Declarations
+Sprite playerSprite;
 void initializePlayer();
 void move(int direction, float delta);
 void shoot();
-void render();

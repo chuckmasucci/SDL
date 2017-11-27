@@ -1,13 +1,29 @@
-test:
-	make build;
-	./spacegame;
+CC=gcc
+SRC=src
+CFLAGS=-lSDL2 -lSDL2_image -I/usr/include/SDL2
+
+LIB_TARGET=build/linkedlist.a
+TARGET=bin/spacegame
+
+SOURCES=$(wildcard $(SRC)/**/*.c $(SRC)/*.c)
+OBJECTS=$(patsubst %.c,%.o,$(SOURCES))
+
+all: $(TARGET)
+
+$(LIB_TARGET): CFLAGS += -fPIC
+$(LIB_TARGET): build $(OBJECTS)
+	ar rcs $@ $(OBJECTS)
+	ranlib $@
+
+$(TARGET): build $(OBJECTS)
+	$(CC) $(OBJECTS) $(CFLAGS) -o $@
+	./bin/spacegame
 
 build:
-	rm -rf spacegame;
-	~/.config/nvim/plugged/clang_complete/bin/cc_args.py gcc -c -B `sdl2-config --cflags` *.c;
-	gcc *.o `sdl2-config --libs` -lSDL2_image -o spacegame;
+	@mkdir -p bin
 
 clean:
-	-rm *.o;
-	-rm spacegame;
-	make
+	rm -rf build $(OBJECTS)
+	find . -name "*.gc*" -exec rm {} \;
+	rm -rf `find . -name "*.dSYM" -print`
+

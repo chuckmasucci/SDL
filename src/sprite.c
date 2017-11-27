@@ -2,6 +2,19 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include "dbg.h"
+#include "sprite.h"
+#include "gfx.h"
+
+Sprite createSprite(char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask) {
+    Sprite sp;
+    sp.frames = frames;
+    sp.path = path;
+    sp.visible = 1;
+    sp.size = size;
+    sp.mask = mask;
+    sp.texture = createSpriteTexture(renderer, path);
+    return sp;
+}
 
 SDL_Texture *createSpriteTexture(SDL_Renderer *renderer, char *imgPath)
 {
