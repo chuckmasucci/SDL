@@ -27,9 +27,6 @@ void clear() {
 }
 
 void setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *destRect) {
-    if(!SDL_RectEmpty(srcRect)) {
-        debug("srcRect->x: %d", srcRect->x);
-    }
     SDL_RenderCopy(renderer, texture, srcRect, destRect);
 }
 

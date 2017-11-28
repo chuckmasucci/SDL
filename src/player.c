@@ -19,15 +19,15 @@ SDL_Rect bullet = {
     .x = 20,
     .y = 20,
     .w = BULLET_WIDTH,
-    .h = BULLET_HEIGHT
+    .h = 20
 };
 
 SDL_Rect playerMask;
 SDL_Rect bulletMask = {
     .x = 0,
     .y = 0,
-    .w = BULLET_WIDTH,
-    .h = BULLET_HEIGHT
+    .w = 10,
+    .h = 20
 };
 
 Sprite playerSprite;
@@ -40,7 +40,7 @@ void initializePlayer() {
     addToRender(&playerSprite, "Player");
 
     // Bullet
-    createSprite(&bulletSprite, BULLET_SPRITE, 0, 1, &bullet, &bulletMask);
+    createSprite(&bulletSprite, BULLET_SPRITE, 4, 1, &bullet, &bulletMask);
     addToRender(&bulletSprite, "Bullet");
 }
 
