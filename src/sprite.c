@@ -15,6 +15,7 @@ Sprite *createSprite(Sprite *sp, char *path, int frames, int visible, SDL_Rect *
     return sp;
 }
 
+
 SDL_Texture *createSpriteTexture(SDL_Renderer *renderer, char *imgPath)
 {
     SDL_Surface *spriteSurface = IMG_Load(imgPath);

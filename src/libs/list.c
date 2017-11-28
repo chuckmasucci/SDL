@@ -6,7 +6,7 @@
 void List_push(struct Node **headRef, void *newData, char *name)
 {
     Node *newNode = malloc(sizeof(Node));
-    newNode->data = &newData;
+    newNode->data = newData;
     newNode->next = *headRef;
     newNode->name = name;
     *headRef = newNode;

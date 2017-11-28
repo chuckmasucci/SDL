@@ -34,10 +34,11 @@ addToRender	src/render.c	/^void addToRender(Sprite *sprite, char *name)$/;"	f
 bullet	player.c	/^SDL_Rect bullet;$/;"	v
 bullet	src/player.c	/^SDL_Rect bullet = {$/;"	v
 bulletMask	player.c	/^SDL_Rect bulletMask;$/;"	v
-bulletMask	src/player.c	/^SDL_Rect bulletMask;$/;"	v
+bulletMask	src/player.c	/^SDL_Rect bulletMask = {$/;"	v
 bulletSprite	player.c	/^SDL_Texture *bulletSprite;$/;"	v
 bulletSprite	src/player.c	/^Sprite bulletSprite;$/;"	v
 clear	gfx.c	/^void clear() {$/;"	f
+clear	src/gfx.c	/^void clear() {$/;"	f
 createSprite	sprite.c	/^Sprite createSprite(char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask) {$/;"	f
 createSprite	src/sprite.c	/^Sprite *createSprite(Sprite *sp, char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask) {$/;"	f
 createSpriteTexture	sprite.c	/^SDL_Texture *createSpriteTexture(SDL_Renderer *renderer, char *imgPath)$/;"	f
@@ -49,6 +50,7 @@ delta	src/spacegame.h	/^float delta;$/;"	v
 frames	sprite.h	/^    int frames;$/;"	m	struct:sprite
 frames	src/sprite.h	/^    int frames;$/;"	m	struct:sprite
 initializeGfx	gfx.c	/^int initializeGfx() {$/;"	f
+initializeGfx	src/gfx.c	/^int initializeGfx() {$/;"	f
 initializePlayer	player.c	/^void initializePlayer() {$/;"	f
 initializePlayer	src/player.c	/^void initializePlayer() {$/;"	f
 main	spacegame.c	/^int main(int argc, char *argv[])$/;"	f
@@ -66,6 +68,7 @@ playerMask	src/player.c	/^SDL_Rect playerMask;$/;"	v
 playerSprite	src/player.c	/^Sprite playerSprite;$/;"	v
 player_h	src/player.h	2;"	d
 present	gfx.c	/^void present() {$/;"	f
+present	src/gfx.c	/^void present() {$/;"	f
 render	player.c	/^void render() {$/;"	f
 render	render.c	/^void render() {$/;"	f
 render	src/render.c	/^void render()$/;"	f
@@ -74,6 +77,7 @@ renderQueue	src/render.c	/^Node *renderQueue = NULL;$/;"	v
 renderer	gfx.h	/^SDL_Renderer *renderer;$/;"	v
 running	spacegame.c	/^int running = 1;$/;"	v
 setTexture	gfx.c	/^void setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *destRect) {$/;"	f
+setTexture	src/gfx.c	/^void setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *destRect) {$/;"	f
 ship	player.c	/^SDL_Rect ship;$/;"	v
 shipMask	player.c	/^SDL_Rect shipMask;$/;"	v
 shipSprite	player.c	/^Sprite shipSprite;$/;"	v

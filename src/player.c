@@ -16,14 +16,19 @@ SDL_Rect player = {
 };
 
 SDL_Rect bullet = {
-    .x = (WINDOW_WIDTH / 2) - (SHIP_WIDTH / 2),
-    .y = WINDOW_HEIGHT - SHIP_HEIGHT - 20,
-    .w = SHIP_WIDTH,
-    .h = SHIP_HEIGHT
+    .x = 20,
+    .y = 20,
+    .w = BULLET_WIDTH,
+    .h = BULLET_HEIGHT
 };
 
 SDL_Rect playerMask;
-SDL_Rect bulletMask;
+SDL_Rect bulletMask = {
+    .x = 0,
+    .y = 0,
+    .w = BULLET_WIDTH,
+    .h = BULLET_HEIGHT
+};
 
 Sprite playerSprite;
 Sprite bulletSprite;
@@ -32,17 +37,11 @@ void initializePlayer() {
 
     // Ship
     createSprite(&playerSprite, SHIP_SPRITE, 0, 1, &player, &playerMask);
-    debug("size x: %d", playerSprite.size->x);
     addToRender(&playerSprite, "Player");
 
     // Bullet
-    bulletMask.x = player.x + (player.w / 2) + 3;
-    bulletMask.y = player.y + player.h - 4;
-    bulletMask.w = 10;
-    bulletMask.h = 20;
-
-    /*bulletSprite = createSprite(BULLET_SPRITE, 4, 1, &bullet, &bulletMask);*/
-    /*addToRender(bulletSprite, "Bullet");*/
+    createSprite(&bulletSprite, BULLET_SPRITE, 0, 1, &bullet, &bulletMask);
+    addToRender(&bulletSprite, "Bullet");
 }
 
 void move(int direction, float delta) {
