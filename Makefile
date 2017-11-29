@@ -23,7 +23,7 @@ build:
 	@mkdir -p bin
 
 clean:
-	rm -rf build $(OBJECTS)
+	rm -rf *.o build $(OBJECTS)
 	find . -name "*.gc*" -exec rm {} \;
 	rm -rf `find . -name "*.dSYM" -print`
 

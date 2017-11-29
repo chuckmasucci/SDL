@@ -30,18 +30,21 @@ SDL_Rect bulletMask = {
     .h = 20
 };
 
-Sprite playerSprite;
-Sprite bulletSprite;
+Sprite *playerSprite;
+Sprite *bulletSprite;
 
 void initializePlayer() {
+    // Allocate memory
+    playerSprite = malloc(sizeof(Sprite));
+    bulletSprite = malloc(sizeof(Sprite));
 
     // Ship
-    createSprite(&playerSprite, SHIP_SPRITE, 0, 1, &player, &playerMask);
-    addToRender(&playerSprite, "Player");
+    createSprite(playerSprite, SHIP_SPRITE, 0, 1, &player, &playerMask);
+    addToRender(playerSprite, "Player");
 
     // Bullet
-    createSprite(&bulletSprite, BULLET_SPRITE, 4, 1, &bullet, &bulletMask);
-    addToRender(&bulletSprite, "Bullet");
+    createSprite(bulletSprite, BULLET_SPRITE, 4, 1, &bullet, &bulletMask);
+    addToRender(bulletSprite, "Bullet");
 }
 
 void move(int direction, float delta) {

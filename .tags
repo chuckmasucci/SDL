@@ -36,7 +36,7 @@ bullet	src/player.c	/^SDL_Rect bullet = {$/;"	v
 bulletMask	player.c	/^SDL_Rect bulletMask;$/;"	v
 bulletMask	src/player.c	/^SDL_Rect bulletMask = {$/;"	v
 bulletSprite	player.c	/^SDL_Texture *bulletSprite;$/;"	v
-bulletSprite	src/player.c	/^Sprite bulletSprite;$/;"	v
+bulletSprite	src/player.c	/^Sprite *bulletSprite;$/;"	v
 clear	gfx.c	/^void clear() {$/;"	f
 clear	src/gfx.c	/^void clear() {$/;"	f
 createSprite	sprite.c	/^Sprite createSprite(char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask) {$/;"	f
@@ -65,7 +65,7 @@ path	sprite.h	/^    char *path;$/;"	m	struct:sprite
 path	src/sprite.h	/^    char *path;$/;"	m	struct:sprite
 player	src/player.c	/^SDL_Rect player = {$/;"	v
 playerMask	src/player.c	/^SDL_Rect playerMask;$/;"	v
-playerSprite	src/player.c	/^Sprite playerSprite;$/;"	v
+playerSprite	src/player.c	/^Sprite *playerSprite;$/;"	v
 player_h	src/player.h	2;"	d
 present	gfx.c	/^void present() {$/;"	f
 present	src/gfx.c	/^void present() {$/;"	f
