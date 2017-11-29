@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "list.h"
-#include "../dbg.h"
 
 void List_push(struct Node **headRef, void *newData, char *name)
 {

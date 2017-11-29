@@ -1,29 +1,27 @@
 CC=gcc
 SRC=src
-CFLAGS=-lSDL2 -lSDL2_image -I/usr/include/SDL2
+BUILD=build
+LIBS_DIR=libs
+CFLAGS=-lSDL2 -lSDL2_image -I/usr/include/SDL2 -Ilibs
 
-LIB_TARGET=build/linkedlist.a
 TARGET=bin/spacegame
+SO_TARGET=$(BUILD)/libList.so
 
 SOURCES=$(wildcard $(SRC)/**/*.c $(SRC)/*.c)
 OBJECTS=$(patsubst %.c,%.o,$(SOURCES))
+LIBS=$(wildcard $(LIBS_DIR)/*.c)
 
-all: $(TARGET)
+all: build $(SO_TARGET) $(TARGET)
 
-$(LIB_TARGET): CFLAGS += -fPIC
-$(LIB_TARGET): build $(OBJECTS)
-	ar rcs $@ $(OBJECTS)
-	ranlib $@
-
-$(TARGET): build $(OBJECTS)
-	$(CC) $(OBJECTS) $(CFLAGS) -o $@
+$(TARGET): $(OBJECTS)
+	$(CC) $(OBJECTS) $(CFLAGS) -o $@ $(LIBS)
 	./bin/spacegame
 
+$(SO_TARGET): $(LIBS)
+	$(CC) -shared -fPIC -o $@ $(LIBS)
+
 build:
-	@mkdir -p bin
+	@mkdir -p bin build
 
 clean:
 	rm -rf *.o build $(OBJECTS)
-	find . -name "*.gc*" -exec rm {} \;
-	rm -rf `find . -name "*.dSYM" -print`
-

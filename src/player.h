@@ -1,6 +1,5 @@
 #ifndef player_h
 #define player_h
-#endif
 
 #include <SDL2/SDL.h>
 #include "sprite.h"
@@ -14,7 +13,13 @@
 #define BULLET_WIDTH 10
 #define BULLET_HEIGHT 80
 
+#define MISSLE_SPRITE "gfx/sprites/missle.proto1.png"
+#define MISSLE_WIDTH 10
+#define MISSLE_HEIGHT 13
+
 // Declarations
 void initializePlayer();
 void move(int direction, float delta);
 void shoot();
+
+#endif

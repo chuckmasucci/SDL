@@ -22,6 +22,13 @@ SDL_Rect bullet = {
     .h = 20
 };
 
+SDL_Rect missle = {
+    .x = 50,
+    .y = 50,
+    .w = MISSLE_WIDTH,
+    .h = MISSLE_HEIGHT
+};
+
 SDL_Rect playerMask;
 SDL_Rect bulletMask = {
     .x = 0,
@@ -29,14 +36,17 @@ SDL_Rect bulletMask = {
     .w = 10,
     .h = 20
 };
+SDL_Rect missleMask;
 
 Sprite *playerSprite;
 Sprite *bulletSprite;
+Sprite *missleSprite;
 
 void initializePlayer() {
     // Allocate memory
     playerSprite = malloc(sizeof(Sprite));
     bulletSprite = malloc(sizeof(Sprite));
+    missleSprite = malloc(sizeof(Sprite));
 
     // Ship
     createSprite(playerSprite, SHIP_SPRITE, 0, 1, &player, &playerMask);
@@ -45,6 +55,10 @@ void initializePlayer() {
     // Bullet
     createSprite(bulletSprite, BULLET_SPRITE, 4, 1, &bullet, &bulletMask);
     addToRender(bulletSprite, "Bullet");
+
+    // Missle
+    createSprite(missleSprite, MISSLE_SPRITE, 0, 1, &missle, &missleMask);
+    addToRender(missleSprite, "Missle");
 }
 
 void move(int direction, float delta) {

@@ -1,8 +1,8 @@
 #include <SDL2/SDL.h>
 #include "gfx.h"
 #include "dbg.h"
-#include "libs/list.h"
 #include "player.h"
+#include <list.h>
 
 Node *renderQueue = NULL;
 Node *currentIndex = NULL;

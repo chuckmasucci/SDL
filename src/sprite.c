@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "dbg.h"
 #include "sprite.h"
+#include "animate.h"
 #include "gfx.h"
 
 Sprite *createSprite(Sprite *sp, char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask) {
@@ -14,7 +15,6 @@ Sprite *createSprite(Sprite *sp, char *path, int frames, int visible, SDL_Rect *
     sp->texture = createSpriteTexture(renderer, path);
     return sp;
 }
-
 
 SDL_Texture *createSpriteTexture(SDL_Renderer *renderer, char *imgPath)
 {

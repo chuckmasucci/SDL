@@ -3,6 +3,7 @@
 #endif
 
 #include <SDL2/SDL.h>
+#include "animate.h"
 
 typedef struct sprite {
     char *path;
@@ -11,6 +12,7 @@ typedef struct sprite {
     int frames;
     int visible;
     SDL_Texture *texture;
+    Animation animation;
 } Sprite;
 
 SDL_Texture *createSpriteTexture(SDL_Renderer *renderer, char *imgPath);
