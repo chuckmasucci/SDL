@@ -23,8 +23,8 @@ SDL_Rect bullet = {
 };
 
 SDL_Rect missle = {
-    .x = 50,
-    .y = 50,
+    .x = (WINDOW_WIDTH / 2) - (MISSLE_WIDTH / 2),
+    .y = WINDOW_HEIGHT - 200,
     .w = MISSLE_WIDTH,
     .h = MISSLE_HEIGHT
 };
@@ -49,15 +49,15 @@ void initializePlayer() {
     missleSprite = malloc(sizeof(Sprite));
 
     // Ship
-    createSprite(playerSprite, SHIP_SPRITE, 0, 1, &player, &playerMask);
+    createSprite(playerSprite, SHIP_SPRITE, 0, 1, &player, &playerMask, 0);
     addToRender(playerSprite, "Player");
 
     // Bullet
-    createSprite(bulletSprite, BULLET_SPRITE, 4, 1, &bullet, &bulletMask);
+    createSprite(bulletSprite, BULLET_SPRITE, 4, 1, &bullet, &bulletMask, 0);
     addToRender(bulletSprite, "Bullet");
 
     // Missle
-    createSprite(missleSprite, MISSLE_SPRITE, 0, 1, &missle, &missleMask);
+    createSprite(missleSprite, MISSLE_SPRITE, 0, 1, &missle, &missleMask, 1);
     addToRender(missleSprite, "Missle");
 }
 

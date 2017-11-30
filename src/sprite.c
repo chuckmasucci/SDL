@@ -6,13 +6,14 @@
 #include "animate.h"
 #include "gfx.h"
 
-Sprite *createSprite(Sprite *sp, char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask) {
+Sprite *createSprite(Sprite *sp, char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask, int isAnimating) {
     sp->frames = frames;
     sp->path = path;
     sp->visible = 1;
     sp->size = size;
     sp->mask = mask;
     sp->texture = createSpriteTexture(renderer, path);
+    sp->isAnimating = isAnimating;
     return sp;
 }
 

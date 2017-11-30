@@ -52,9 +52,10 @@ bulletSprite	src/player.c	/^Sprite *bulletSprite;$/;"	v
 clear	gfx.c	/^void clear() {$/;"	f
 clear	src/gfx.c	/^void clear() {$/;"	f
 createSprite	sprite.c	/^Sprite createSprite(char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask) {$/;"	f
-createSprite	src/sprite.c	/^Sprite *createSprite(Sprite *sp, char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask) {$/;"	f
+createSprite	src/sprite.c	/^Sprite *createSprite(Sprite *sp, char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask, int isAnimating) {$/;"	f
 createSpriteTexture	sprite.c	/^SDL_Texture *createSpriteTexture(SDL_Renderer *renderer, char *imgPath)$/;"	f
 createSpriteTexture	src/sprite.c	/^SDL_Texture *createSpriteTexture(SDL_Renderer *renderer, char *imgPath)$/;"	f
+curr_secs	src/render.c	/^int curr_secs;$/;"	v
 currentIndex	src/render.c	/^Node *currentIndex = NULL;$/;"	v
 currentX	src/animate.h	/^    int currentX;$/;"	m	struct:Animation
 currentY	src/animate.h	/^    int currentY;$/;"	m	struct:Animation
@@ -62,6 +63,7 @@ data	libs/list.h	/^    void *data;$/;"	m	struct:Node
 data	src/libs/list.h	/^    void *data;$/;"	m	struct:Node
 delta	spacegame.h	/^float delta;$/;"	v
 delta	src/spacegame.h	/^float delta;$/;"	v
+distance	src/render.c	/^int distance = 100;$/;"	v
 frames	sprite.h	/^    int frames;$/;"	m	struct:sprite
 frames	src/sprite.h	/^    int frames;$/;"	m	struct:sprite
 fromX	src/animate.h	/^    int fromX;$/;"	m	struct:Animation
@@ -71,6 +73,7 @@ initializeGfx	src/gfx.c	/^int initializeGfx() {$/;"	f
 initializePlayer	player.c	/^void initializePlayer() {$/;"	f
 initializePlayer	src/player.c	/^void initializePlayer() {$/;"	f
 isAnimating	src/animate.h	/^    int isAnimating;$/;"	m	struct:Animation
+isAnimating	src/sprite.h	/^    int isAnimating;$/;"	m	struct:sprite
 main	spacegame.c	/^int main(int argc, char *argv[])$/;"	f
 main	src/spacegame.c	/^int main(int argc, char *argv[])$/;"	f
 mask	sprite.h	/^    SDL_Rect *mask;$/;"	m	struct:sprite
@@ -92,9 +95,10 @@ playerSprite	src/player.c	/^Sprite *playerSprite;$/;"	v
 player_h	src/player.h	2;"	d
 present	gfx.c	/^void present() {$/;"	f
 present	src/gfx.c	/^void present() {$/;"	f
+prev_secs	src/render.c	/^int prev_secs;$/;"	v
 render	player.c	/^void render() {$/;"	f
 render	render.c	/^void render() {$/;"	f
-render	src/render.c	/^void render()$/;"	f
+render	src/render.c	/^void render(float timeDelta)$/;"	f
 renderItem	src/render.c	/^Sprite *renderItem = NULL;$/;"	v
 renderQueue	src/render.c	/^Node *renderQueue = NULL;$/;"	v
 renderer	gfx.h	/^SDL_Renderer *renderer;$/;"	v
@@ -107,11 +111,13 @@ shipSprite	player.c	/^Sprite shipSprite;$/;"	v
 size	sprite.h	/^    SDL_Rect *size;$/;"	m	struct:sprite
 size	src/sprite.h	/^    SDL_Rect *size;$/;"	m	struct:sprite
 spacegame_h	src/spacegame.h	2;"	d
+speed	src/render.c	/^int speed;$/;"	v
 sprite	sprite.h	/^typedef struct sprite {$/;"	s
 sprite	src/sprite.h	/^typedef struct sprite {$/;"	s
 sprite_h	src/sprite.h	2;"	d
 texture	sprite.h	/^    SDL_Texture *texture;$/;"	m	struct:sprite
 texture	src/sprite.h	/^    SDL_Texture *texture;$/;"	m	struct:sprite
+time	src/render.c	/^int time = 100;$/;"	v
 toX	src/animate.h	/^    int toX;$/;"	m	struct:Animation
 toY	src/animate.h	/^    int toY;$/;"	m	struct:Animation
 visible	sprite.h	/^    int visible;$/;"	m	struct:sprite

@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
             move(moveDirection, delta);
         }
 
-        render();
+        render(delta);
     }
 
     return 0;
