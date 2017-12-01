@@ -4,6 +4,7 @@
 #include "gfx.h"
 #include "dbg.h"
 #include "player.h"
+#include "sprite.h"
 
 Node *renderQueue = NULL;
 Node *currentIndex = NULL;
@@ -14,19 +15,16 @@ void addToRender(Sprite *sprite, char *name)
     List_push(&renderQueue, sprite, name);
 }
 
-int curr_secs;
-int prev_secs;
-int distance = 100;
 int time = 100;
-int speed;
+int speed1 = 5;
+int speed2 = 10;
+
 void render(float timeDelta)
 {
     SDL_Rect *mask;
     int ms = SDL_GetTicks();
     int frameDelay = 100;
     int frame;
-
-    speed = distance / time;
 
     if(currentIndex == NULL) {
         currentIndex = renderQueue;
@@ -48,13 +46,12 @@ void render(float timeDelta)
         }
 
         if(renderItem->isAnimating) {
-            int seconds = (ms / 1);
-            curr_secs = seconds;
-            if(curr_secs > prev_secs) {
-                debug("delta: %f", 1 / timeDelta);
-                renderItem->size->y -= 1;
-            }
-            prev_secs = curr_secs;
+            /*debug("delta: %f", 1 / timeDelta);*/
+            renderItem->size->y -= speed2;
+            debug("Anim from fromx: %d", renderItem->animation->fromX);
+            debug("Anim from fromy: %d", renderItem->animation->fromY);
+            debug("Anim from tox: %d", renderItem->animation->toX);
+            debug("Anim from toy: %d", renderItem->animation->toY);
         }
 
         setTexture(renderer, renderItem->texture, mask, renderItem->size);

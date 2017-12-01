@@ -5,6 +5,7 @@
 #include "player.h"
 #include "gfx.h"
 #include "render.h"
+#include "sprite.h"
 
 #define MOVEMENT_SPEED 200
 
@@ -42,6 +43,13 @@ Sprite *playerSprite;
 Sprite *bulletSprite;
 Sprite *missleSprite;
 
+Animation anim = {
+    .fromX  = 100,
+    .fromY  = 400,
+    .toX    = 100,
+    .toY    = 400
+};
+
 void initializePlayer() {
     // Allocate memory
     playerSprite = malloc(sizeof(Sprite));
@@ -49,15 +57,15 @@ void initializePlayer() {
     missleSprite = malloc(sizeof(Sprite));
 
     // Ship
-    createSprite(playerSprite, SHIP_SPRITE, 0, 1, &player, &playerMask, 0);
+    createSprite(playerSprite, SHIP_SPRITE, 0, 1, &player, &playerMask, 0, NULL);
     addToRender(playerSprite, "Player");
 
     // Bullet
-    createSprite(bulletSprite, BULLET_SPRITE, 4, 1, &bullet, &bulletMask, 0);
+    createSprite(bulletSprite, BULLET_SPRITE, 4, 1, &bullet, &bulletMask, 0, NULL);
     addToRender(bulletSprite, "Bullet");
 
     // Missle
-    createSprite(missleSprite, MISSLE_SPRITE, 0, 1, &missle, &missleMask, 1);
+    createSprite(missleSprite, MISSLE_SPRITE, 0, 1, &missle, &missleMask, 1, &anim);
     addToRender(missleSprite, "Missle");
 }
 

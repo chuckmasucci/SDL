@@ -3,10 +3,9 @@
 #include <stdio.h>
 #include "dbg.h"
 #include "sprite.h"
-#include "animate.h"
 #include "gfx.h"
 
-Sprite *createSprite(Sprite *sp, char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask, int isAnimating) {
+void createSprite(Sprite *sp, char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask, int isAnimating, Animation *animation) {
     sp->frames = frames;
     sp->path = path;
     sp->visible = 1;
@@ -14,7 +13,7 @@ Sprite *createSprite(Sprite *sp, char *path, int frames, int visible, SDL_Rect *
     sp->mask = mask;
     sp->texture = createSpriteTexture(renderer, path);
     sp->isAnimating = isAnimating;
-    return sp;
+    sp->animation = animation;
 }
 
 SDL_Texture *createSpriteTexture(SDL_Renderer *renderer, char *imgPath)

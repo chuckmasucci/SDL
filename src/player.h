@@ -2,7 +2,6 @@
 #define player_h
 
 #include <SDL2/SDL.h>
-#include "sprite.h"
 
 // Ship data
 #define SHIP_SPRITE "gfx/sprites/ship.proto1.png"
