@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <list.h>
 #include "dbg.h"
 #include "player.h"
 #include "gfx.h"
@@ -11,9 +10,6 @@
 
 int main(int argc, char *argv[])
 {
-    Node *head = NULL;
-    char *str1 = "String 1";
-    char *str2 = "String 2";
     int running = 1;
 
     // Initialize movement variables
@@ -55,6 +51,9 @@ int main(int argc, char *argv[])
                             break;
                         case SDLK_ESCAPE:
                             running = 0;
+                            break;
+                        case SDLK_SPACE:
+                            shoot();
                             break;
                     }
                     break;

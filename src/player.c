@@ -6,6 +6,8 @@
 #include "gfx.h"
 #include "render.h"
 #include "sprite.h"
+#include "flags.h"
+#include "list.h"
 
 #define MOVEMENT_SPEED 200
 
@@ -31,42 +33,24 @@ SDL_Rect missle = {
 };
 
 SDL_Rect playerMask;
+SDL_Rect missleMask;
 SDL_Rect bulletMask = {
     .x = 0,
     .y = 0,
     .w = 10,
     .h = 20
 };
-SDL_Rect missleMask;
 
-Sprite *playerSprite;
-Sprite *bulletSprite;
-Sprite *missleSprite;
-
-Animation anim = {
-    .fromX  = 100,
-    .fromY  = 400,
-    .toX    = 100,
-    .toY    = 400
-};
+int spriteid = 0;
 
 void initializePlayer() {
-    // Allocate memory
-    playerSprite = malloc(sizeof(Sprite));
-    bulletSprite = malloc(sizeof(Sprite));
-    missleSprite = malloc(sizeof(Sprite));
-
     // Ship
-    createSprite(playerSprite, SHIP_SPRITE, 0, 1, &player, &playerMask, 0, NULL);
+    Sprite *playerSprite = createSprite("Player", SHIP_SPRITE, 0, 1, &player, &playerMask, NULL);
     addToRender(playerSprite, "Player");
 
     // Bullet
-    createSprite(bulletSprite, BULLET_SPRITE, 4, 1, &bullet, &bulletMask, 0, NULL);
+    Sprite *bulletSprite = createSprite("Bullet", BULLET_SPRITE, 4, 1, &bullet, &bulletMask, NULL);
     addToRender(bulletSprite, "Bullet");
-
-    // Missle
-    createSprite(missleSprite, MISSLE_SPRITE, 0, 1, &missle, &missleMask, 1, &anim);
-    addToRender(missleSprite, "Missle");
 }
 
 void move(int direction, float delta) {
@@ -86,3 +70,36 @@ void move(int direction, float delta) {
         }
     }
 }
+
+void shoot() {
+    SDL_Rect *s = malloc(sizeof(SDL_Rect));
+    s->x = 20 * spriteid;
+    s->y = 20;
+    s->w = MISSLE_WIDTH;
+    s->h = MISSLE_HEIGHT;
+
+    Animation *animation;
+    animation = malloc(sizeof(Animation));
+    animation->toX += spriteid;
+    animation->fromX = player.x + (player.w / 2);
+    animation->toX = animation->fromX;
+    animation->fromY = player.y;
+    animation->toY = 10;
+
+    // Missle
+    Sprite *missleSprite = NULL;
+    char *spriteName;
+
+    spriteid++;
+
+    spriteName = malloc(10 * sizeof(char));
+    sprintf(spriteName, "Missle%d", spriteid);
+    missle.x = missle.x + 10;
+
+    missleSprite = createSprite(spriteName, MISSLE_SPRITE, 0, 1, s, NULL, animation);
+    addToRender(missleSprite, spriteName);
+
+    missleSprite->animation->isAnimating = 0;
+    *(missleSprite->flags) |= FLAG_ANIMATING;
+}
+
