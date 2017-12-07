@@ -6,6 +6,7 @@
 #include "player.h"
 #include "sprite.h"
 #include "flags.h"
+#include "background.h"
 
 Node *renderQueue = NULL;
 Node *currentNode = NULL;
@@ -30,7 +31,8 @@ void render(float timeDelta)
         currentNode = renderQueue;
     }
 
-    clear();
+    renderBackground();
+
     int renderAmt = List_count(renderQueue);
     for(int i = 0; i < renderAmt; i++) {
         renderSprite = (Sprite*)currentNode->data;
@@ -48,7 +50,7 @@ void render(float timeDelta)
                     renderSprite->animation->isAnimating = 1;
                 } else {
                     if(renderSprite->size->y > renderSprite->animation->toY) {
-                        renderSprite->size->y -= speed1;
+                        renderSprite->size->y -= speed2;
                     } else {
                         *(renderSprite)->flags |= FLAG_REMOVE;
                     }
@@ -67,5 +69,6 @@ void render(float timeDelta)
         currentNode = currentNode->next;
 
     }
+
     present();
 }

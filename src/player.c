@@ -4,7 +4,6 @@
 #include "dbg.h"
 #include "player.h"
 #include "gfx.h"
-#include "render.h"
 #include "sprite.h"
 #include "flags.h"
 #include "list.h"
@@ -81,7 +80,7 @@ void shoot() {
     Animation *animation;
     animation = malloc(sizeof(Animation));
     animation->toX += spriteid;
-    animation->fromX = player.x + (player.w / 2);
+    animation->fromX = player.x + (player.w / 2) - 3;
     animation->toX = animation->fromX;
     animation->fromY = player.y;
     animation->toY = 10;

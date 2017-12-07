@@ -5,6 +5,7 @@
 #include "player.h"
 #include "gfx.h"
 #include "render.h"
+#include "background.h"
 
 #define FRAMERATE 5
 
@@ -28,6 +29,9 @@ int main(int argc, char *argv[])
 
     // Initialize player
     initializePlayer();
+
+    // Generate the background data
+    getBackground();
 
     // The loop
     while(running) {
