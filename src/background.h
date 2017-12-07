@@ -3,8 +3,8 @@
 
 #include <SDL2/SDL.h>
 int stars;
-void *getBackground();
+void *getGeneratedBackground();
 int rng();
 void renderBackground();
-
+void setBitmapBackground();
 #endif

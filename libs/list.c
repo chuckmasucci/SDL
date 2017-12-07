@@ -8,6 +8,7 @@
 void List_print(struct Node **headRef) {
     Node *currentNode = *headRef;
     for(int i = 0; i < List_count(*headRef); i++) {
+        debug("%s", currentNode->name);
         currentNode = currentNode->next;
     }
 }
@@ -20,6 +21,7 @@ void List_push(struct Node **headRef, void *newData, char *name)
     newNode->name = name;
     newNode->flagged = 0;
     *headRef = newNode;
+    List_print(headRef);
 }
 
 void List_remove(struct Node **headRef, Sprite *sprite)

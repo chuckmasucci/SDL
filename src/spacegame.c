@@ -31,7 +31,8 @@ int main(int argc, char *argv[])
     initializePlayer();
 
     // Generate the background data
-    getBackground();
+    /*getGeneratedBackground();*/
+    setBitmapBackground();
 
     // The loop
     while(running) {

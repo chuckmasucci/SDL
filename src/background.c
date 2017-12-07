@@ -4,10 +4,12 @@
 #include "dbg.h"
 #include "gfx.h"
 #include "player.h"
+#include "sprite.h"
+#include "render.h"
 
 int test = 50;
 SDL_Point *points;
-void *getBackground()
+void *getGeneratedBackground()
 {
     stars = 1000;
     points = malloc(stars * sizeof(SDL_Point));
@@ -19,12 +21,23 @@ void *getBackground()
     }
 }
 
+SDL_Rect backgroundSize = {
+    .x = 0,
+    .y = 0,
+    .w = 800,
+    .h = 600
+};
+void setBitmapBackground() {
+    Sprite *backgroundSprite = createSprite("background", "gfx/sprites/background.proto1.png", 0, 1, &backgroundSize, NULL, NULL);
+    addToRender(backgroundSprite, "background");
+}
+
 void renderBackground()
 {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    /*SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);*/
     clear();
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_RenderDrawPoints(renderer, points, stars);
+    /*SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);*/
+    /*SDL_RenderDrawPoints(renderer, points, stars);*/
 }
 
 int rng(int limit)

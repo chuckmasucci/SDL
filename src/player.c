@@ -6,7 +6,7 @@
 #include "gfx.h"
 #include "sprite.h"
 #include "flags.h"
-#include "list.h"
+#include "render.h"
 
 #define MOVEMENT_SPEED 200
 
