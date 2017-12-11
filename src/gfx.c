@@ -33,3 +33,9 @@ void setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *srcRect,
 void present() {
     SDL_RenderPresent(renderer);
 }
+
+void destroyGfx()
+{
+    SDL_DestroyWindow(window);
+    /*SDL_DestroyRenderer(renderer);*/
+}

@@ -3,5 +3,6 @@
 
 void render(float delta);
 void addToRender();
+void destroyRenderQueue();
 
 #endif

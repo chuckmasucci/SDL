@@ -41,6 +41,21 @@ error:
 
 void destroySprite(Sprite *sprite)
 {
-    free(sprite->animation);
+    if(sprite->id) {
+        free(sprite->id);
+    }
+
+    if(sprite->size) {
+        free(sprite->size);
+    }
+
+    if(sprite->mask) {
+        free(sprite->mask);
+    }
+
+    if(sprite->animation) {
+        free(sprite->animation);
+    }
+
     free(sprite);
 }

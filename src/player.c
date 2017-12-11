@@ -10,20 +10,6 @@
 
 #define MOVEMENT_SPEED 200
 
-SDL_Rect player = {
-    .x = (WINDOW_WIDTH / 2) - (SHIP_WIDTH / 2),
-    .y = WINDOW_HEIGHT - SHIP_HEIGHT - 20,
-    .w = SHIP_WIDTH,
-    .h = SHIP_HEIGHT
-};
-
-SDL_Rect bullet = {
-    .x = 20,
-    .y = 20,
-    .w = BULLET_WIDTH,
-    .h = 20
-};
-
 SDL_Rect missle = {
     .x = (WINDOW_WIDTH / 2) - (MISSLE_WIDTH / 2),
     .y = WINDOW_HEIGHT - 200,
@@ -31,58 +17,74 @@ SDL_Rect missle = {
     .h = MISSLE_HEIGHT
 };
 
-SDL_Rect playerMask;
-SDL_Rect missleMask;
-SDL_Rect bulletMask = {
-    .x = 0,
-    .y = 0,
-    .w = 10,
-    .h = 20
-};
-
+SDL_Rect *playerMask;
+SDL_Rect *player;
 int spriteid = 0;
 
-void initializePlayer() {
-    // Ship
-    Sprite *playerSprite = createSprite("Player", SHIP_SPRITE, 0, 1, &player, &playerMask, NULL);
-    addToRender(playerSprite, "Player");
+int initializePlayer() {
 
-    // Bullet
-    Sprite *bulletSprite = createSprite("Bullet", BULLET_SPRITE, 4, 1, &bullet, &bulletMask, NULL);
-    addToRender(bulletSprite, "Bullet");
+    // Ship
+    player = malloc(sizeof(SDL_Rect));
+    check_mem(player);
+    player->x = (WINDOW_WIDTH / 2) - (SHIP_WIDTH / 2);
+    player->y = WINDOW_HEIGHT - SHIP_HEIGHT - 20;
+    player->w = SHIP_WIDTH;
+    player->h = SHIP_HEIGHT;
+
+    playerMask = malloc(sizeof(SDL_Rect));
+    check_mem(playerMask);
+    playerMask->x = 0;
+    playerMask->y = 0;
+    playerMask->w = SHIP_WIDTH;
+    playerMask->h = SHIP_HEIGHT;
+
+    char *playerName = malloc(10 * sizeof(char));
+    check_mem(playerName);
+    strncpy(playerName, "Player", 10);
+    Sprite *playerSprite = createSprite(playerName, SHIP_SPRITE, 4, 1, player, playerMask, NULL);
+    addToRender(playerSprite);
+
+    return 0;
+
+error:
+    SDL_Quit();
+    log_err("Error while initializing player: Shutdown");
+    return -1;
 }
 
 void move(int direction, float delta) {
     // -1 = left, 1 = right
     float speed = MOVEMENT_SPEED * delta;
     if(direction < 0) {
-        if(player.x > 0) {
-            player.x -= (int)speed;
+        if(player->x > 0) {
+            player->x -= (int)speed;
         } else {
-            player.x = 0;
+            player->x = 0;
         }
     } else if(direction > 0) {
-        if(player.x < WINDOW_WIDTH - player.w) {
-            player.x += (int)speed;
+        if(player->x < WINDOW_WIDTH - player->w) {
+            player->x += (int)speed;
         } else {
-            player.x = WINDOW_WIDTH - player.w;
+            player->x = WINDOW_WIDTH - player->w;
         }
     }
 }
 
 void shoot() {
-    SDL_Rect *s = malloc(sizeof(SDL_Rect));
-    s->x = 20 * spriteid;
-    s->y = 20;
-    s->w = MISSLE_WIDTH;
-    s->h = MISSLE_HEIGHT;
+    SDL_Rect *size = malloc(sizeof(SDL_Rect));
+    check_mem(size);
+    size->x = 20 * spriteid;
+    size->y = 20;
+    size->w = MISSLE_WIDTH;
+    size->h = MISSLE_HEIGHT;
 
     Animation *animation;
     animation = malloc(sizeof(Animation));
+    check_mem(animation);
     animation->toX += spriteid;
-    animation->fromX = player.x + (player.w / 2) - 3;
+    animation->fromX = player->x + (player->w / 2) - 3;
     animation->toX = animation->fromX;
-    animation->fromY = player.y;
+    animation->fromY = player->y;
     animation->toY = 10;
 
     // Missle
@@ -92,13 +94,19 @@ void shoot() {
     spriteid++;
 
     spriteName = malloc(10 * sizeof(char));
+    check_mem(spriteName);
     sprintf(spriteName, "Missle%d", spriteid);
     missle.x = missle.x + 10;
 
-    missleSprite = createSprite(spriteName, MISSLE_SPRITE, 0, 1, s, NULL, animation);
+    missleSprite = createSprite(spriteName, MISSLE_SPRITE, 0, 1, size, NULL, animation);
     addToRender(missleSprite, spriteName);
 
     missleSprite->animation->isAnimating = 0;
     *(missleSprite->flags) |= FLAG_ANIMATING;
+
+    return;
+
+error:
+    log_err("Error while shooting");
 }
 

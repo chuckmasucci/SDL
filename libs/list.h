@@ -6,12 +6,11 @@
 
 typedef struct Node {
     void *data;
-    char *name;
-    uint flagged;
     struct Node *next;
 } Node;
 
-void List_push(struct Node **headRef, void *newData, char *name);
+void List_push(struct Node **headRef, void *newData);
 int List_count(Node *headRef);
-void List_remove(struct Node **headRef, Sprite *sprite);
+Node *List_remove(struct Node **headRef, Sprite *sprite);
+void List_destroy(struct Node **headRef);
 #endif

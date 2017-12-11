@@ -2,7 +2,7 @@ CC=gcc
 SRC=src
 BUILD=build
 LIBS_DIR=libs
-CFLAGS=-lSDL2 -lSDL2_image -I/usr/include/SDL2 -I$(LIBS_DIR) -I$(SRC)
+CFLAGS=-lSDL2 -lSDL2_image -I/usr/include/SDL2 -I$(LIBS_DIR) -I$(SRC) -ggdb
 
 TARGET=bin/spacegame
 SO_TARGET=$(BUILD)/libList.so

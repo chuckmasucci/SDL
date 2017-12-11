@@ -24,11 +24,11 @@ void *getGeneratedBackground()
 SDL_Rect backgroundSize = {
     .x = 0,
     .y = 0,
-    .w = 800,
-    .h = 600
+    .w = 2560,
+    .h = 1600
 };
 void setBitmapBackground() {
-    Sprite *backgroundSprite = createSprite("background", "gfx/sprites/background.proto1.png", 0, 1, &backgroundSize, NULL, NULL);
+    Sprite *backgroundSprite = createSprite("background", "gfx/sprites/background.proto3.jpg", 0, 1, &backgroundSize, NULL, NULL);
     addToRender(backgroundSprite, "background");
 }
 
@@ -50,4 +50,9 @@ int rng(int limit)
     } while (retval > limit);
 
     return retval;
+}
+
+void destroyBackground()
+{
+    free(points);
 }

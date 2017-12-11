@@ -14,9 +14,13 @@ Sprite *renderSprite = NULL;
 int speed1 = 5;
 int speed2 = 10;
 
-void addToRender(Sprite *sprite, char *name)
+void addToRender(Sprite *sprite)
 {
-    List_push(&renderQueue, sprite, name);
+    check(sprite != NULL, "Bad sprite added to render queue");
+    List_push(&renderQueue, sprite);
+
+error:
+    return;
 }
 
 void render(float timeDelta)
@@ -26,6 +30,8 @@ void render(float timeDelta)
     int frameDelay = 100;
     int frame;
     int shouldRender = 1;
+    int removed = 0;
+    Node *updatedNode;
 
     if(currentNode == NULL) {
         currentNode = renderQueue;
@@ -40,7 +46,7 @@ void render(float timeDelta)
         mask = (SDL_RectEmpty(renderSprite->mask)) ? NULL  : renderSprite->mask;
         if(renderSprite->frames > 0) {
             frame = (SDL_GetTicks() / frameDelay) % renderSprite->frames;
-            mask->y = frame * 20;
+            mask->y = frame * mask->h;
         }
         if(renderSprite->animation && renderSprite->flags) {
             if(*(renderSprite)->flags & FLAG_ANIMATING) {
@@ -63,12 +69,22 @@ void render(float timeDelta)
         if(renderSprite->flags) {
             if(*(renderSprite)->flags & FLAG_REMOVE) {
                 *(renderSprite)->flags &= ~(FLAG_REMOVE);
-                List_remove(&renderQueue, renderSprite);
+                removed = 1;
+                updatedNode = List_remove(&renderQueue, renderSprite);
             }
         }
-        currentNode = currentNode->next;
-
+        if(!removed) {
+            currentNode = currentNode->next;
+        } else {
+            currentNode = updatedNode;
+            removed = 0;
+        }
     }
 
     present();
+}
+
+void destroyRenderQueue()
+{
+    List_destroy(&renderQueue);
 }

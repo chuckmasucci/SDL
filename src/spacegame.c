@@ -6,6 +6,7 @@
 #include "gfx.h"
 #include "render.h"
 #include "background.h"
+#include "gfx.h"
 
 #define FRAMERATE 5
 
@@ -92,5 +93,9 @@ int main(int argc, char *argv[])
         render(delta);
     }
 
+    destroyRenderQueue();
+    destroyBackground();
+    destroyGfx();
+    atexit(SDL_Quit);
     return 0;
 }

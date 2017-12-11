@@ -7,4 +7,5 @@ void *getGeneratedBackground();
 int rng();
 void renderBackground();
 void setBitmapBackground();
+void destroyBackground();
 #endif
