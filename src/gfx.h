@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
@@ -9,7 +8,7 @@ SDL_Window *window;
 SDL_Renderer *renderer;
 
 int initializeGfx();
-void clear();
-void setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *destRect);
+int clear();
+int setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *destRect);
 void present();
 void destroyGfx();

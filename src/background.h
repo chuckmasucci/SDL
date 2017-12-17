@@ -6,6 +6,6 @@ int stars;
 void *getGeneratedBackground();
 int rng();
 void renderBackground();
-void setBitmapBackground();
+int setBitmapBackground();
 void destroyBackground();
 #endif

@@ -1,12 +1,11 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "dbg.h"
+#include <dbg.h>
 #include "player.h"
 #include "gfx.h"
 #include "render.h"
 #include "background.h"
-#include "gfx.h"
 
 #define FRAMERATE 5
 
@@ -17,7 +16,7 @@ int main(int argc, char *argv[])
     // Initialize movement variables
     int isLeftKeyDown = 0;
     int isRightKeyDown = 0;
-    int moveDirection = 10;
+    int moveDirection = 0;
 
     // Initialize timing variables
     float freq;
@@ -33,7 +32,7 @@ int main(int argc, char *argv[])
 
     // Generate the background data
     /*getGeneratedBackground();*/
-    setBitmapBackground();
+    /*setBitmapBackground();*/
 
     // The loop
     while(running) {

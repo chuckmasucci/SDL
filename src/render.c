@@ -1,8 +1,8 @@
-#include <SDL2/SDL.h>
-#include <list.h>
 #include <stdio.h>
+#include <SDL2/SDL.h>
+#include <dbg.h>
+#include <list.h>
 #include "gfx.h"
-#include "dbg.h"
 #include "player.h"
 #include "sprite.h"
 #include "flags.h"
@@ -70,7 +70,8 @@ void render(float timeDelta)
             if(*(renderSprite)->flags & FLAG_REMOVE) {
                 *(renderSprite)->flags &= ~(FLAG_REMOVE);
                 removed = 1;
-                updatedNode = List_remove(&renderQueue, renderSprite);
+                destroySprite(renderSprite);
+                /*updatedNode = List_remove(&renderQueue, renderSprite);*/
             }
         }
         if(!removed) {
@@ -86,5 +87,5 @@ void render(float timeDelta)
 
 void destroyRenderQueue()
 {
-    List_destroy(&renderQueue);
+    /*List_destroy(&renderQueue);*/
 }

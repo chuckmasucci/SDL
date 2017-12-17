@@ -21,15 +21,29 @@ void *getGeneratedBackground()
     }
 }
 
-SDL_Rect backgroundSize = {
-    .x = 0,
-    .y = 0,
-    .w = 2560,
-    .h = 1600
-};
-void setBitmapBackground() {
-    Sprite *backgroundSprite = createSprite("background", "gfx/sprites/background.proto3.jpg", 0, 1, &backgroundSize, NULL, NULL);
-    addToRender(backgroundSprite, "background");
+
+SDL_Rect *backgroundSize;
+int setBitmapBackground() {
+    /*backgroundSize = malloc(sizeof(SDL_Rect));*/
+    /*check_mem(backgroundSize);*/
+    /*backgroundSize->x = 0;*/
+    /*backgroundSize->y = 0;*/
+    /*backgroundSize->w = 2560;*/
+    /*backgroundSize->h = 1600;*/
+
+    /*char *backgroundName = malloc(20 * sizeof(char));*/
+    /*check_mem(backgroundName);*/
+    /*strncpy(backgroundName, "background", 20);*/
+
+    /*Sprite *backgroundSprite = createSprite(backgroundName, "gfx/sprites/background.proto3.jpg", 0, 1, backgroundSize, NULL, NULL);*/
+    /*addToRender(backgroundSprite);*/
+
+    return 0;
+
+error:
+    SDL_Quit();
+    log_err("Error while initializing player: Shutdown");
+    return -1;
 }
 
 void renderBackground()

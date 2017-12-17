@@ -1,4 +1,4 @@
-#include "dbg.h"
+#include <dbg.h>
 #include "gfx.h"
 
 int initializeGfx() {
@@ -22,12 +22,30 @@ error:
     return -1;
 }
 
-void clear() {
-    SDL_RenderClear(renderer);
+int clear() {
+    int renderClear = SDL_RenderClear(renderer);
+    check(renderClear == 0, "Could not set texture: %s", SDL_GetError());
+
+    return 0;
+
+error:
+    SDL_Quit();
+    log_err("SDL Error: Shutdown");
+
+    return -1;
 }
 
-void setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *destRect) {
-    SDL_RenderCopy(renderer, texture, srcRect, destRect);
+int setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *destRect) {
+    int renderCopy = SDL_RenderCopy(renderer, texture, srcRect, destRect);
+    check(renderCopy == 0, "Could not set texture: %s", SDL_GetError());
+
+    return 0;
+
+error:
+    SDL_Quit();
+    log_err("SDL Error: Shutdown");
+
+    return -1;
 }
 
 void present() {
@@ -37,5 +55,4 @@ void present() {
 void destroyGfx()
 {
     SDL_DestroyWindow(window);
-    /*SDL_DestroyRenderer(renderer);*/
 }
