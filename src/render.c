@@ -71,7 +71,7 @@ void render(float timeDelta)
                 *(renderSprite)->flags &= ~(FLAG_REMOVE);
                 removed = 1;
                 destroySprite(renderSprite);
-                /*updatedNode = List_remove(&renderQueue, renderSprite);*/
+                updatedNode = List_remove(&renderQueue, currentNode->id);
             }
         }
         if(!removed) {
@@ -87,5 +87,12 @@ void render(float timeDelta)
 
 void destroyRenderQueue()
 {
-    /*List_destroy(&renderQueue);*/
+    int renderAmt = List_count(renderQueue);
+    currentNode = renderQueue;
+    for(int i = 0; i < renderAmt; i++) {
+        renderSprite = (Sprite*)currentNode->data;
+        destroySprite(renderSprite);
+        currentNode = List_remove(&renderQueue, currentNode->id);
+    }
+
 }
