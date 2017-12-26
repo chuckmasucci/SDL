@@ -42,7 +42,7 @@ int initializePlayer() {
     check_mem(playerName);
     strncpy(playerName, "Player", 10);
     Sprite *playerSprite = createSprite(playerName, SHIP_SPRITE, 4, 1, player, playerMask, NULL);
-    addToRender(playerSprite);
+    addToRender(playerSprite, Z_RENDER_0);
 
     return 0;
 
@@ -99,10 +99,10 @@ void shoot() {
     missle.x = missle.x + 10;
 
     missleSprite = createSprite(spriteName, MISSLE_SPRITE, 0, 1, size, NULL, animation);
-    addToRender(missleSprite, spriteName);
+    addToRender(missleSprite, Z_RENDER_1);
 
     missleSprite->animation->isAnimating = 0;
-    *(missleSprite->flags) |= FLAG_ANIMATING;
+    missleSprite->flags |= FLAG_ANIMATING;
 
     return;
 

@@ -12,9 +12,10 @@ typedef struct sprite {
     int frames;
     int visible;
     SDL_Texture *texture;
-    int isAnimating;
     Animation *animation;
-    int *flags;
+    int flags;
+    int isAnimating;
+    int remove;
 } Sprite;
 
 SDL_Texture *createSpriteTexture(SDL_Renderer *renderer, char *imgPath);

@@ -6,7 +6,6 @@
 #include "gfx.h"
 Sprite *createSprite(char *id, char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask, Animation *animation) {
     Sprite *sprite = malloc(sizeof(Sprite));
-    static int flagInt = 0;
     sprite->id = id;
     sprite->frames = frames;
     sprite->path = path;
@@ -15,8 +14,9 @@ Sprite *createSprite(char *id, char *path, int frames, int visible, SDL_Rect *si
     sprite->mask = mask;
     sprite->texture = createSpriteTexture(renderer, path);
     sprite->isAnimating = 0;
+    sprite->remove = 0;
     sprite->animation = animation;
-    sprite->flags = &flagInt;
+    sprite->flags = 0;
     return sprite;
 }
 

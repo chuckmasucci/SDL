@@ -2,97 +2,158 @@
 #include <SDL2/SDL.h>
 #include <dbg.h>
 #include <list.h>
+#include <darray.h>
 #include "gfx.h"
 #include "player.h"
 #include "sprite.h"
 #include "flags.h"
 #include "background.h"
+#include "render.h"
 
-Node *renderQueue = NULL;
+#define RENDERER_AMT 2
+
+Node **renderers[RENDERER_AMT];
+Node *renderIndex_1 = NULL;
+Node *renderIndex_2 = NULL;
 Node *currentNode = NULL;
+
 Sprite *renderSprite = NULL;
+
 int speed1 = 5;
 int speed2 = 10;
 
-void addToRender(Sprite *sprite)
+Node *cleanupSprite(Sprite *sprite, Node **renderIndex);
+
+int initializeRender() {
+    renderers[0] = &renderIndex_1;
+    renderers[1] = &renderIndex_2;
+
+    int len = sizeof(renderers) / sizeof(renderers[0]);
+
+    return 0;
+}
+
+void addToRender(Sprite *sprite, int zIndex)
 {
+    Node **queue = renderers[zIndex];
     check(sprite != NULL, "Bad sprite added to render queue");
-    List_push(&renderQueue, sprite);
+    check(queue != NULL, "Array index out of range");
+
+    List_push(queue, sprite);
 
 error:
     return;
 }
 
-void render(float timeDelta)
+void render()
 {
-    SDL_Rect *mask;
-    int ms = SDL_GetTicks();
-    int frameDelay = 100;
-    int frame;
-    int shouldRender = 1;
-    int removed = 0;
-    Node *updatedNode;
+    int i = 0;
+    clear();
+    for(i = 0; i < RENDERER_AMT; i++) {
+        if(*renderers[i] != NULL) {
+            Node *rendererCurrent = *renderers[i];
+            Node *updatedNode = NULL;
+            int j = 0;
+            int queueCount = List_count(rendererCurrent);
+            currentNode = rendererCurrent;
+            for(j = 0; j < queueCount; j++) {
+                renderSprite = (Sprite*)currentNode->data;
 
-    if(currentNode == NULL) {
-        currentNode = renderQueue;
-    }
+                // Animation
+                if(renderSprite->frames > 0 || renderSprite->flags & FLAG_ANIMATING && renderSprite->animation) {
+                    animateSpriteRects(renderSprite);
+                }
 
-    renderBackground();
-
-    int renderAmt = List_count(renderQueue);
-    for(int i = 0; i < renderAmt; i++) {
-        renderSprite = (Sprite*)currentNode->data;
-
-        mask = (SDL_RectEmpty(renderSprite->mask)) ? NULL  : renderSprite->mask;
-        if(renderSprite->frames > 0) {
-            frame = (SDL_GetTicks() / frameDelay) % renderSprite->frames;
-            mask->y = frame * mask->h;
-        }
-        if(renderSprite->animation && renderSprite->flags) {
-            if(*(renderSprite)->flags & FLAG_ANIMATING) {
-                if(!renderSprite->animation->isAnimating) {
-                    renderSprite->size->x = renderSprite->animation->fromX;
-                    renderSprite->size->y = renderSprite->animation->fromY;
-                    renderSprite->animation->isAnimating = 1;
-                } else {
-                    if(renderSprite->size->y > renderSprite->animation->toY) {
-                        renderSprite->size->y -= speed2;
-                    } else {
-                        *(renderSprite)->flags |= FLAG_REMOVE;
+                // Cleanup
+                if(renderSprite->flags & FLAG_REMOVE) {
+                    updatedNode = cleanupSprite(renderSprite, &rendererCurrent);
+                    renderSprite = NULL;
+                    if(queueCount == 1) {
+                        *renderers[i] = NULL;
+                        continue;
                     }
+                }
+
+                // Set the next current node
+                if(!updatedNode) {
+                    currentNode = currentNode->next;
+                } else {
+                    currentNode = updatedNode;
+                }
+
+                if(renderSprite) {
+                    setTexture(renderer, renderSprite->texture, renderSprite->mask, renderSprite->size);
                 }
             }
         }
+    }
+    present();
+}
 
-        setTexture(renderer, renderSprite->texture, mask, renderSprite->size);
+void animateSpriteRects(Sprite *sprite)
+{
+    SDL_Rect *mask = (SDL_RectEmpty(sprite->mask)) ? NULL : sprite->mask;
 
-        if(renderSprite->flags) {
-            if(*(renderSprite)->flags & FLAG_REMOVE) {
-                *(renderSprite)->flags &= ~(FLAG_REMOVE);
-                removed = 1;
-                destroySprite(renderSprite);
-                updatedNode = List_remove(&renderQueue, currentNode->id);
-            }
-        }
-        if(!removed) {
-            currentNode = currentNode->next;
-        } else {
-            currentNode = updatedNode;
-            removed = 0;
-        }
+    // Do sprite frame animation
+    if(sprite->frames > 0) {
+        int frameDelay = 100;
+        int frame = (SDL_GetTicks() / frameDelay) % renderSprite->frames;
+        mask->y = frame * mask->h;
     }
 
-    present();
+    // Do x,y animation
+    if(sprite->flags & FLAG_ANIMATING && sprite->animation) {
+        if(!sprite->animation->isAnimating) {
+            // Start the animation
+            sprite->size->x = sprite->animation->fromX;
+            sprite->size->y = sprite->animation->fromY;
+            sprite->animation->isAnimating = 1;
+        } else {
+            // Continue the animation & add 'remove' flag when complete
+            if(sprite->size->y > renderSprite->animation->toY) {
+                sprite->size->y -= speed2;
+            } else {
+                (sprite)->flags |= FLAG_REMOVE;
+            }
+        }
+    }
+}
+
+Node *cleanupSprite(Sprite *sprite, Node **renderIndex)
+{
+    Node *updatedNode;
+
+    // Clean up the sprite
+    if(sprite->flags & FLAG_REMOVE) {
+        // Remove the flag
+        sprite->flags &= ~(FLAG_REMOVE);
+
+        // Destroy the sprite
+        destroySprite(sprite);
+
+        // Remove the node and get the next node
+        updatedNode = List_remove(renderIndex, currentNode->id);
+
+        return updatedNode;
+    }
+
+    return NULL;
 }
 
 void destroyRenderQueue()
 {
-    int renderAmt = List_count(renderQueue);
-    currentNode = renderQueue;
-    for(int i = 0; i < renderAmt; i++) {
-        renderSprite = (Sprite*)currentNode->data;
-        destroySprite(renderSprite);
-        currentNode = List_remove(&renderQueue, currentNode->id);
+    int i;
+    for(i = 0; i < RENDERER_AMT; i++) {
+        if(*renderers[i] != NULL) {
+            Node *rendererCurrent = *renderers[i];
+            int j = 0;
+            int queueCount = List_count(rendererCurrent);
+            currentNode = rendererCurrent;
+            for(j = 0; j < queueCount; j++) {
+                renderSprite = (Sprite*)currentNode->data;
+                destroySprite(renderSprite);
+                currentNode = List_remove(&rendererCurrent, currentNode->id);
+            }
+        }
     }
-
 }

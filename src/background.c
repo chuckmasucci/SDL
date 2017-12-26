@@ -24,19 +24,19 @@ void *getGeneratedBackground()
 
 SDL_Rect *backgroundSize;
 int setBitmapBackground() {
-    /*backgroundSize = malloc(sizeof(SDL_Rect));*/
-    /*check_mem(backgroundSize);*/
-    /*backgroundSize->x = 0;*/
-    /*backgroundSize->y = 0;*/
-    /*backgroundSize->w = 2560;*/
-    /*backgroundSize->h = 1600;*/
+    backgroundSize = malloc(sizeof(SDL_Rect));
+    check_mem(backgroundSize);
+    backgroundSize->x = 0;
+    backgroundSize->y = 0;
+    backgroundSize->w = 2560;
+    backgroundSize->h = 1600;
 
-    /*char *backgroundName = malloc(20 * sizeof(char));*/
-    /*check_mem(backgroundName);*/
-    /*strncpy(backgroundName, "background", 20);*/
+    char *backgroundName = malloc(20 * sizeof(char));
+    check_mem(backgroundName);
+    strncpy(backgroundName, "background", 20);
 
-    /*Sprite *backgroundSprite = createSprite(backgroundName, "gfx/sprites/background.proto3.jpg", 0, 1, backgroundSize, NULL, NULL);*/
-    /*addToRender(backgroundSprite);*/
+    Sprite *backgroundSprite = createSprite(backgroundName, "gfx/sprites/background.proto3.jpg", 0, 1, backgroundSize, NULL, NULL);
+    addToRender(backgroundSprite, Z_RENDER_0);
 
     return 0;
 

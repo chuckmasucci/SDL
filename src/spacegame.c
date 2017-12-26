@@ -27,6 +27,9 @@ int main(int argc, char *argv[])
     // Start graphics
     initializeGfx();
 
+    // Initialize Render
+    initializeRender();
+
     // Initialize player
     initializePlayer();
 
