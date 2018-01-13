@@ -7,23 +7,13 @@
 #include "sprite.h"
 #include "flags.h"
 #include "render.h"
+#include "animate.h"
 
 #define MOVEMENT_SPEED 200
 
-SDL_Rect missle = {
-    .x = (WINDOW_WIDTH / 2) - (MISSLE_WIDTH / 2),
-    .y = WINDOW_HEIGHT - 200,
-    .w = MISSLE_WIDTH,
-    .h = MISSLE_HEIGHT
-};
-
 SDL_Rect *playerMask;
-SDL_Rect *player;
-int spriteid = 0;
 
 int initializePlayer() {
-
-    // Ship
     player = malloc(sizeof(SDL_Rect));
     check_mem(player);
     player->x = (WINDOW_WIDTH / 2) - (SHIP_WIDTH / 2);
@@ -70,43 +60,4 @@ void move(int direction, float delta) {
     }
 }
 
-void shoot() {
-    SDL_Rect *size = malloc(sizeof(SDL_Rect));
-    check_mem(size);
-    size->x = 20 * spriteid;
-    size->y = 20;
-    size->w = MISSLE_WIDTH;
-    size->h = MISSLE_HEIGHT;
-
-    Animation *animation;
-    animation = malloc(sizeof(Animation));
-    check_mem(animation);
-    animation->toX += spriteid;
-    animation->fromX = player->x + (player->w / 2) - 3;
-    animation->toX = animation->fromX;
-    animation->fromY = player->y;
-    animation->toY = 10;
-
-    // Missle
-    Sprite *missleSprite = NULL;
-    char *spriteName;
-
-    spriteid++;
-
-    spriteName = malloc(10 * sizeof(char));
-    check_mem(spriteName);
-    sprintf(spriteName, "Missle%d", spriteid);
-    missle.x = missle.x + 10;
-
-    missleSprite = createSprite(spriteName, MISSLE_SPRITE, 0, 1, size, NULL, animation);
-    addToRender(missleSprite, Z_RENDER_1);
-
-    missleSprite->animation->isAnimating = 0;
-    missleSprite->flags |= FLAG_ANIMATING;
-
-    return;
-
-error:
-    log_err("Error while shooting");
-}
 

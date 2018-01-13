@@ -2,7 +2,6 @@
 #define sprite_h
 
 #include <SDL2/SDL.h>
-#include "animate.h"
 
 typedef struct sprite {
     char *id;
@@ -12,14 +11,13 @@ typedef struct sprite {
     int frames;
     int visible;
     SDL_Texture *texture;
-    Animation *animation;
+    void *animation;
     int flags;
     int isAnimating;
-    int remove;
 } Sprite;
 
 SDL_Texture *createSpriteTexture(SDL_Renderer *renderer, char *imgPath);
-Sprite *createSprite(char *id, char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask, Animation *animation);
+Sprite *createSprite(char *id, char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask, void *animation);
 void destroySprite(Sprite *sprite);
 
 #endif

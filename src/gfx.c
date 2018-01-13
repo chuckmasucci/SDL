@@ -35,8 +35,8 @@ error:
     return -1;
 }
 
-int setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *destRect) {
-    int renderCopy = SDL_RenderCopy(renderer, texture, srcRect, destRect);
+int setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *destRect, int flip) {
+    int renderCopy = (!flip) ? SDL_RenderCopy(renderer, texture, srcRect, destRect) : SDL_RenderCopyEx(renderer, texture, srcRect, destRect, 0, NULL, SDL_FLIP_VERTICAL);
     check(renderCopy == 0, "Could not set texture: %s", SDL_GetError());
 
     return 0;

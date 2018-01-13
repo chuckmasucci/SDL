@@ -6,67 +6,70 @@
 #include "player.h"
 #include "sprite.h"
 #include "render.h"
+#include "flags.h"
+#include "animate.h"
 
-int test = 50;
-SDL_Point *points;
-void *getGeneratedBackground()
+#define BACKGROUND_SPRITE "gfx/sprites/background.proto4.jpg"
+#define BACKGROUND_WIDTH 1024
+#define BACKGROUND_HEIGHT 1024
+#define BACKGROUND_SPEED 1
+
+float tileAmountX;
+float tileAmountY;
+
+int initializeBackground()
 {
-    stars = 1000;
-    points = malloc(stars * sizeof(SDL_Point));
-    for (int i = 0; i < stars; ++i) {
-        int x = rng(WINDOW_WIDTH);
-        int y = rng(WINDOW_HEIGHT);
-        SDL_Point point = {x, y};
-        points[i] = point;
+    tileAmountX = ceil((float)WINDOW_WIDTH / (float)BACKGROUND_WIDTH);
+    tileAmountY = ceil((float)WINDOW_HEIGHT / (float)BACKGROUND_HEIGHT) + 1;
+    int tileTotal = (int)tileAmountX * (int)tileAmountY;
+
+    int x, y = 0;
+    for(x = 0; x < tileTotal; x++) {
+        int tilePosX = x % (int)tileAmountX;
+        if(tilePosX == 0 && x > 0) {
+            y++;
+        }
+        int tilePosY = y;
+
+        Animation animationParent;
+        animationParent.type = CONTINUOUS;
+        animationParent.isAnimating = 0;
+
+        AnimationContinuous *backgroundAnimation;
+        backgroundAnimation = malloc(sizeof(AnimationToFrom));
+        check_mem(backgroundAnimation);
+        backgroundAnimation->speed = BACKGROUND_SPEED;
+        backgroundAnimation->anim = animationParent;
+
+        SDL_Rect *backgroundSize;
+        backgroundSize = malloc(sizeof(SDL_Rect));
+        check_mem(backgroundSize);
+        backgroundSize->x = tilePosX * BACKGROUND_WIDTH;
+        backgroundSize->y = tilePosY * BACKGROUND_HEIGHT;
+        backgroundSize->w = BACKGROUND_WIDTH;
+        backgroundSize->h = BACKGROUND_HEIGHT;
+
+        char *backgroundName;
+        backgroundName = malloc(20 * sizeof(char));
+        check_mem(backgroundName);
+        sprintf(backgroundName, "Background%d", x);
+
+        Sprite *backgroundSprite = createSprite(backgroundName, BACKGROUND_SPRITE, 0, 1, backgroundSize, NULL, backgroundAnimation);
+        backgroundSprite->flags |= FLAG_ANIMATING;
+        addToRender(backgroundSprite, Z_RENDER_0);
     }
-}
-
-
-SDL_Rect *backgroundSize;
-int setBitmapBackground() {
-    backgroundSize = malloc(sizeof(SDL_Rect));
-    check_mem(backgroundSize);
-    backgroundSize->x = 0;
-    backgroundSize->y = 0;
-    backgroundSize->w = 2560;
-    backgroundSize->h = 1600;
-
-    char *backgroundName = malloc(20 * sizeof(char));
-    check_mem(backgroundName);
-    strncpy(backgroundName, "background", 20);
-
-    Sprite *backgroundSprite = createSprite(backgroundName, "gfx/sprites/background.proto3.jpg", 0, 1, backgroundSize, NULL, NULL);
-    addToRender(backgroundSprite, Z_RENDER_0);
 
     return 0;
 
 error:
     SDL_Quit();
-    log_err("Error while initializing player: Shutdown");
+    log_err("Error while initializing background: Shutdown");
     return -1;
 }
 
-void renderBackground()
+void updateBackground(SDL_Rect *bgRect)
 {
-    /*SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);*/
-    clear();
-    /*SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);*/
-    /*SDL_RenderDrawPoints(renderer, points, stars);*/
-}
-
-int rng(int limit)
-{
-    int divisor = RAND_MAX/(limit+1);
-    int retval;
-
-    do {
-        retval = rand() / divisor;
-    } while (retval > limit);
-
-    return retval;
-}
-
-void destroyBackground()
-{
-    free(points);
+    if(bgRect->y >= WINDOW_HEIGHT) {
+        bgRect->y -= tileAmountY * BACKGROUND_HEIGHT;
+    }
 }

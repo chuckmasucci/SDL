@@ -8,15 +8,9 @@
 #define SHIP_WIDTH 73
 #define SHIP_HEIGHT 122
 
-#define BULLET_SPRITE "gfx/sprites/bullet.proto1.png"
-#define BULLET_WIDTH 10
-#define BULLET_HEIGHT 80
-
-#define MISSLE_SPRITE "gfx/sprites/missle.proto1.png"
-#define MISSLE_WIDTH 10
-#define MISSLE_HEIGHT 13
 
 // Declarations
+SDL_Rect *player;
 int initializePlayer();
 void move(int direction, float delta);
 void shoot();

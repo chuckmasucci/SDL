@@ -1,10 +1,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
+#include "animate.h"
 #include "dbg.h"
 #include "sprite.h"
 #include "gfx.h"
-Sprite *createSprite(char *id, char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask, Animation *animation) {
+
+Sprite *createSprite(char *id, char *path, int frames, int visible, SDL_Rect *size, SDL_Rect *mask, void *animation) {
     Sprite *sprite = malloc(sizeof(Sprite));
     sprite->id = id;
     sprite->frames = frames;
@@ -14,7 +16,6 @@ Sprite *createSprite(char *id, char *path, int frames, int visible, SDL_Rect *si
     sprite->mask = mask;
     sprite->texture = createSpriteTexture(renderer, path);
     sprite->isAnimating = 0;
-    sprite->remove = 0;
     sprite->animation = animation;
     sprite->flags = 0;
     return sprite;
@@ -55,6 +56,10 @@ void destroySprite(Sprite *sprite)
 
     if(sprite->animation) {
         free(sprite->animation);
+        Animation *animation = (Animation *)sprite->animation;
+        if(animation->type == BEZIER) {
+            debug("bezier");
+        }
     }
 
     free(sprite);

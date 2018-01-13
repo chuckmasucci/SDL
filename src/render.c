@@ -3,12 +3,14 @@
 #include <dbg.h>
 #include <list.h>
 #include <darray.h>
+#include <bezier.h>
 #include "gfx.h"
 #include "player.h"
 #include "sprite.h"
 #include "flags.h"
 #include "background.h"
 #include "render.h"
+#include "animate.h"
 
 #define RENDERER_AMT 2
 
@@ -29,6 +31,11 @@ int initializeRender() {
     renderers[1] = &renderIndex_2;
 
     int len = sizeof(renderers) / sizeof(renderers[0]);
+
+    Vector2 p0 = {
+        .x = 100,
+        .y = 0
+    };
 
     return 0;
 }
@@ -59,6 +66,10 @@ void render()
             for(j = 0; j < queueCount; j++) {
                 renderSprite = (Sprite*)currentNode->data;
 
+                if(strstr(renderSprite->id, "Background") != NULL) {
+                    updateBackground(renderSprite->size);
+                }
+
                 // Animation
                 if(renderSprite->frames > 0 || renderSprite->flags & FLAG_ANIMATING && renderSprite->animation) {
                     animateSpriteRects(renderSprite);
@@ -82,7 +93,8 @@ void render()
                 }
 
                 if(renderSprite) {
-                    setTexture(renderer, renderSprite->texture, renderSprite->mask, renderSprite->size);
+                    int flipTexture = (renderSprite->flags & FLAG_FLIPPED) ? 1 : 0;
+                    setTexture(renderer, renderSprite->texture, renderSprite->mask, renderSprite->size, flipTexture);
                 }
             }
         }
@@ -97,24 +109,38 @@ void animateSpriteRects(Sprite *sprite)
     // Do sprite frame animation
     if(sprite->frames > 0) {
         int frameDelay = 100;
-        int frame = (SDL_GetTicks() / frameDelay) % renderSprite->frames;
+        int frame = (SDL_GetTicks() / frameDelay) % sprite->frames;
         mask->y = frame * mask->h;
     }
 
     // Do x,y animation
-    if(sprite->flags & FLAG_ANIMATING && sprite->animation) {
-        if(!sprite->animation->isAnimating) {
-            // Start the animation
-            sprite->size->x = sprite->animation->fromX;
-            sprite->size->y = sprite->animation->fromY;
-            sprite->animation->isAnimating = 1;
-        } else {
-            // Continue the animation & add 'remove' flag when complete
-            if(sprite->size->y > renderSprite->animation->toY) {
-                sprite->size->y -= speed2;
+    if(sprite->flags & FLAG_ANIMATING && sprite->animation)  {
+        Animation *animation = (Animation *)sprite->animation;
+        if(animation->type == TO_FROM) {
+            AnimationToFrom *animation = sprite->animation;
+            if(!animation->anim.isAnimating) {
+                // Start the animation
+                sprite->size->x = animation->fromX;
+                sprite->size->y = animation->fromY;
+                animation->anim.isAnimating = 1;
             } else {
-                (sprite)->flags |= FLAG_REMOVE;
+                // Continue the animation & add 'remove' flag when complete
+                if(sprite->size->y > animation->toY) {
+                    sprite->size->y -= speed2;
+                } else {
+                    sprite->flags |= FLAG_REMOVE;
+                }
             }
+        } else if(animation->type == CONTINUOUS) {
+            AnimationContinuous *animation = sprite->animation;
+            sprite->size->y += animation->speed;
+        } else if(animation->type == BEZIER) {
+            AnimationBezier *animation = sprite->animation;
+            if(animation->currentPoint < 100) {
+                animation->currentPoint++;
+                sprite->size->x = (int)animation->points[animation->currentPoint].x;
+                sprite->size->y = (int)animation->points[animation->currentPoint].y;
+            } 
         }
     }
 }

@@ -7,8 +7,9 @@ INCLUDE_SDL=/usr/include/SDL2
 INCLUDE_DARRAY=/home/chuck/.local/lib/chuck/darray
 INCLUDE_DBG=/home/chuck/.local/lib/chuck/dbg
 INCLUDE_LIST=/home/chuck/.local/lib/chuck/list
-INCLUDES=-I$(INCLUDE_DBG) -I$(INCLUDE_LIST) -I$(INCLUDE_DARRAY) -I$(INCLUDE_SDL)
-LIB_DIRS=-L$(INCLUDE_DBG) -L$(INCLUDE_LIST) -L$(INCLUDE_DARRAY)
+INCLUDE_BEZIER=/home/chuck/.local/lib/chuck/bezier
+INCLUDES=-I$(INCLUDE_DBG) -I$(INCLUDE_LIST) -I$(INCLUDE_DARRAY) -I$(INCLUDE_BEZIER) -I$(INCLUDE_SDL)
+LIB_DIRS=-L$(INCLUDE_DBG) -L$(INCLUDE_LIST) -L$(INCLUDE_DARRAY) -L$(INCLUDE_BEZIER)
 
 # Libs
 LIB_SDL=SDL2
@@ -16,7 +17,8 @@ LIB_SDL_IMAGE=SDL2_image
 LIB_DBG=dbg
 LIB_LIST=list
 LIB_DARRAY=darray
-LIBS=-l$(LIB_SDL) -l$(LIB_SDL_IMAGE) -l$(LIB_DBG) -l$(LIB_LIST) -l$(LIB_DARRAY)
+LIB_BEZIER=bezier
+LIBS=-l$(LIB_SDL) -l$(LIB_SDL_IMAGE) -l$(LIB_DBG) -l$(LIB_LIST) -l$(LIB_DARRAY) -l$(LIB_BEZIER)
 
 CFLAGS=$(INCLUDES) $(LIBS) $(LIB_DIRS) -ggdb
 
@@ -29,7 +31,6 @@ all: build $(TARGET)
 
 $(TARGET): $(OBJECTS)
 	$(CC) $(OBJECTS) $(CFLAGS) -o $@
-export LD_LIBRARY_PATH=/home/chuck/.local/lib/chuck/dbg:/home/chuck/.local/lib/chuck/list
 
 build:
 	@mkdir -p bin build

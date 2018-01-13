@@ -9,6 +9,6 @@ SDL_Renderer *renderer;
 
 int initializeGfx();
 int clear();
-int setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *destRect);
+int setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *destRect, int flip);
 void present();
 void destroyGfx();
