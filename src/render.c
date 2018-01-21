@@ -1,22 +1,24 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
+#include <bezier.h>
+#include <darray.h>
 #include <dbg.h>
 #include <list.h>
-#include <darray.h>
-#include <bezier.h>
+#include "animate.h"
+#include "background.h"
+#include "flags.h"
 #include "gfx.h"
 #include "player.h"
-#include "sprite.h"
-#include "flags.h"
-#include "background.h"
 #include "render.h"
-#include "animate.h"
+#include "spacegame.h"
+#include "sprite.h"
 
-#define RENDERER_AMT 2
+#define RENDERER_AMT 3
 
 Node **renderers[RENDERER_AMT];
 Node *renderIndex_1 = NULL;
 Node *renderIndex_2 = NULL;
+Node *renderIndex_3 = NULL;
 Node *currentNode = NULL;
 
 Sprite *renderSprite = NULL;
@@ -29,13 +31,9 @@ Node *cleanupSprite(Sprite *sprite, Node **renderIndex);
 int initializeRender() {
     renderers[0] = &renderIndex_1;
     renderers[1] = &renderIndex_2;
+    renderers[2] = &renderIndex_3;
 
     int len = sizeof(renderers) / sizeof(renderers[0]);
-
-    Vector2 p0 = {
-        .x = 100,
-        .y = 0
-    };
 
     return 0;
 }
@@ -99,6 +97,7 @@ void render()
             }
         }
     }
+
     present();
 }
 
@@ -135,12 +134,17 @@ void animateSpriteRects(Sprite *sprite)
             AnimationContinuous *animation = sprite->animation;
             sprite->size->y += animation->speed;
         } else if(animation->type == BEZIER) {
-            AnimationBezier *animation = sprite->animation;
-            if(animation->currentPoint < 100) {
-                animation->currentPoint++;
-                sprite->size->x = (int)animation->points[animation->currentPoint].x;
-                sprite->size->y = (int)animation->points[animation->currentPoint].y;
-            } 
+            if(animation->delay <= msElapsed) {
+                AnimationBezier *animation = sprite->animation;
+                if(animation->currentPoint < BEZIER_STEPS) {
+                    animation->currentPoint++;
+                    sprite->size->x = (int)animation->points[animation->currentPoint].x;
+                    sprite->size->y = (int)animation->points[animation->currentPoint].y;
+                } else {
+                    /*debug("x: %d", (int)animation->points[animation->currentPoint].x);*/
+                    /*debug("y: %d", (int)animation->points[animation->currentPoint].y);*/
+                }
+            }
         }
     }
 }

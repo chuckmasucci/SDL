@@ -68,7 +68,7 @@ void shoot()
     sprintf(spriteName, "Missle%d", spriteid);
     missle.x = missle.x + 10;
 
-    missleSprite = createSprite(spriteName, MISSLE_SPRITE, 0, 1, size, NULL, animation);
+    missleSprite = createSprite(spriteName, MISSLE_SPRITE, 0, 255, 1, size, NULL, animation);
     missleSprite->flags |= FLAG_ANIMATING;
     addToRender(missleSprite, Z_RENDER_1);
 

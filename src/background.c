@@ -54,7 +54,7 @@ int initializeBackground()
         check_mem(backgroundName);
         sprintf(backgroundName, "Background%d", x);
 
-        Sprite *backgroundSprite = createSprite(backgroundName, BACKGROUND_SPRITE, 0, 1, backgroundSize, NULL, backgroundAnimation);
+        Sprite *backgroundSprite = createSprite(backgroundName, BACKGROUND_SPRITE, 0, 100, 1, backgroundSize, NULL, backgroundAnimation);
         backgroundSprite->flags |= FLAG_ANIMATING;
         addToRender(backgroundSprite, Z_RENDER_0);
     }
