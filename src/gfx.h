@@ -10,10 +10,10 @@
 SDL_Window *window;
 SDL_Renderer *renderer;
 
-int initializeGfx();
+int initialize_gfx();
 int clear();
-int setTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *destRect, int flip);
+int set_texture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *srcRect, SDL_Rect *destRect, int flip);
 void present();
-void destroyGfx();
+void destroy_gfx();
 
 #endif

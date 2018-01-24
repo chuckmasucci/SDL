@@ -3,6 +3,6 @@
 
 #include <SDL2/SDL.h>
 
-int initializeBackground();
-void updateBackground(SDL_Rect *bgRect);
+int initialize_background();
+void update_background(SDL_Rect *bg_rect);
 #endif

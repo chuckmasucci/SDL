@@ -44,9 +44,9 @@ void shoot()
     size->w = MISSLE_WIDTH;
     size->h = MISSLE_HEIGHT;
 
-    Animation missleAnimation;
-    missleAnimation.type = TO_FROM;
-    missleAnimation.isAnimating = 0;
+    Animation missle_animation;
+    missle_animation.type = TO_FROM;
+    missle_animation.is_animating = 0;
 
     AnimationToFrom *animation;
     animation = malloc(sizeof(AnimationToFrom));
@@ -54,23 +54,23 @@ void shoot()
     animation->fromX = player->x + (player->w / 2) - 3;
     animation->toX = animation->fromX;
     animation->fromY = player->y;
-    animation->toY = 10;
-    animation->anim = missleAnimation;
+    animation->to_y = 10;
+    animation->anim = missle_animation;
 
     // Missle
-    Sprite *missleSprite = NULL;
-    char *spriteName;
+    Sprite *missle_sprite = NULL;
+    char *sprite_name;
 
     spriteid++;
 
-    spriteName = malloc(10 * sizeof(char));
-    check_mem(spriteName);
-    sprintf(spriteName, "Missle%d", spriteid);
+    sprite_name = malloc(10 * sizeof(char));
+    check_mem(sprite_name);
+    sprintf(sprite_name, "Missle%d", spriteid);
     missle.x = missle.x + 10;
 
-    missleSprite = createSprite(spriteName, MISSLE_SPRITE, 0, 255, 1, size, NULL, animation);
-    missleSprite->flags |= FLAG_ANIMATING;
-    addToRender(missleSprite, Z_RENDER_1);
+    missle_sprite = create_sprite(sprite_name, MISSLE_SPRITE, 0, 255, 1, size, NULL, animation);
+    missle_sprite->flags |= FLAG_ANIMATING;
+    add_to_render(missle_sprite, Z_RENDER_1);
 
     return;
 

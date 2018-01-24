@@ -20,9 +20,9 @@
 #include <list.h>
 #include "event.h"
 
-Node *eventStack = NULL;
+Node *event_stack = NULL;
 
-int addEventListener(char *name, void (*handler)(void))
+int add_event_listener(char *name, void (*handler)(void))
 {
     Event *event;
     event = malloc(sizeof(Event));
@@ -30,20 +30,20 @@ int addEventListener(char *name, void (*handler)(void))
     strcpy(event->name, name);
     event->handler = handler;
 
-    List_push(&eventStack, event);
+    List_push(&event_stack, event);
 
     return 0;
 }
 
-int dispatchEvent(char *name)
+int dispatch_event(char *name)
 {
-    int count = List_count(eventStack);
-    Event *event = (Event *)eventStack->data;
+    int count = List_count(event_stack);
+    Event *event = (Event *)event_stack->data;
     for(int i = 0; i < count; i++) {
         if(strcmp(name, event->name) == 0) {
             event->handler();
-            if(eventStack->next) {
-                event = (Event *)eventStack->next->data;
+            if(event_stack->next) {
+                event = (Event *)event_stack->next->data;
             }
         }
     }

@@ -29,7 +29,7 @@
 #define ENEMY_COLUMNS 6
 #define ENEMY_ROWS (int)ceil((float)ENEMY_COUNT / (float)ENEMY_COLUMNS)
 
-int addEnemy(Vector2 *animationPoints);
-void positionEnemies(/* Node **enemyHead*/);
+int add_enemy(Vector2 *animation_points);
+void position_enemies(/* Node **enemyHead*/);
 
 #endif

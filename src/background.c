@@ -14,49 +14,49 @@
 #define BACKGROUND_HEIGHT 1024
 #define BACKGROUND_SPEED 1
 
-float tileAmountX;
-float tileAmountY;
+float tile_amount_x;
+float tile_amount_y;
 
-int initializeBackground()
+int initialize_background()
 {
-    tileAmountX = ceil((float)WINDOW_WIDTH / (float)BACKGROUND_WIDTH);
-    tileAmountY = ceil((float)WINDOW_HEIGHT / (float)BACKGROUND_HEIGHT) + 1;
-    int tileTotal = (int)tileAmountX * (int)tileAmountY;
+    tile_amount_x = ceil((float)WINDOW_WIDTH / (float)BACKGROUND_WIDTH);
+    tile_amount_y = ceil((float)WINDOW_HEIGHT / (float)BACKGROUND_HEIGHT) + 1;
+    int tile_total = (int)tile_amount_x * (int)tile_amount_y;
 
     int x, y = 0;
-    for(x = 0; x < tileTotal; x++) {
-        int tilePosX = x % (int)tileAmountX;
-        if(tilePosX == 0 && x > 0) {
+    for(x = 0; x < tile_total; x++) {
+        int tile_pos_x = x % (int)tile_amount_x;
+        if(tile_pos_x == 0 && x > 0) {
             y++;
         }
-        int tilePosY = y;
+        int tile_pos_y = y;
 
-        Animation animationParent;
-        animationParent.type = CONTINUOUS;
-        animationParent.isAnimating = 0;
+        Animation animation_parent;
+        animation_parent.type = CONTINUOUS;
+        animation_parent.is_animating = 0;
 
-        AnimationContinuous *backgroundAnimation;
-        backgroundAnimation = malloc(sizeof(AnimationToFrom));
-        check_mem(backgroundAnimation);
-        backgroundAnimation->speed = BACKGROUND_SPEED;
-        backgroundAnimation->anim = animationParent;
+        AnimationContinuous *background_animation;
+        background_animation = malloc(sizeof(AnimationToFrom));
+        check_mem(background_animation);
+        background_animation->speed = BACKGROUND_SPEED;
+        background_animation->anim = animation_parent;
 
-        SDL_Rect *backgroundSize;
-        backgroundSize = malloc(sizeof(SDL_Rect));
-        check_mem(backgroundSize);
-        backgroundSize->x = tilePosX * BACKGROUND_WIDTH;
-        backgroundSize->y = tilePosY * BACKGROUND_HEIGHT;
-        backgroundSize->w = BACKGROUND_WIDTH;
-        backgroundSize->h = BACKGROUND_HEIGHT;
+        SDL_Rect *background_size;
+        background_size = malloc(sizeof(SDL_Rect));
+        check_mem(background_size);
+        background_size->x = tile_pos_x * BACKGROUND_WIDTH;
+        background_size->y = tile_pos_y * BACKGROUND_HEIGHT;
+        background_size->w = BACKGROUND_WIDTH;
+        background_size->h = BACKGROUND_HEIGHT;
 
-        char *backgroundName;
-        backgroundName = malloc(20 * sizeof(char));
-        check_mem(backgroundName);
-        sprintf(backgroundName, "Background%d", x);
+        char *background_name;
+        background_name = malloc(20 * sizeof(char));
+        check_mem(background_name);
+        sprintf(background_name, "Background%d", x);
 
-        Sprite *backgroundSprite = createSprite(backgroundName, BACKGROUND_SPRITE, 0, 100, 1, backgroundSize, NULL, backgroundAnimation);
-        backgroundSprite->flags |= FLAG_ANIMATING;
-        addToRender(backgroundSprite, Z_RENDER_0);
+        Sprite *background_sprite = create_sprite(background_name, BACKGROUND_SPRITE, 0, 100, 1, background_size, NULL, background_animation);
+        background_sprite->flags |= FLAG_ANIMATING;
+        add_to_render(background_sprite, Z_RENDER_0);
     }
 
     return 0;
@@ -67,9 +67,9 @@ error:
     return -1;
 }
 
-void updateBackground(SDL_Rect *bgRect)
+void update_background(SDL_Rect *bg_rect)
 {
-    if(bgRect->y >= WINDOW_HEIGHT) {
-        bgRect->y -= tileAmountY * BACKGROUND_HEIGHT;
+    if(bg_rect->y >= WINDOW_HEIGHT) {
+        bg_rect->y -= tile_amount_y * BACKGROUND_HEIGHT;
     }
 }

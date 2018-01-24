@@ -13,7 +13,7 @@ enum AnimationType {
 
 typedef struct Animation {
     enum AnimationType type;
-    int isAnimating;
+    int is_animating;
     int delay;
 } Animation;
 
@@ -22,7 +22,7 @@ typedef struct AnimationToFrom {
     int fromX;
     int fromY;
     int toX;
-    int toY;
+    int to_y;
     int currentX;
     int currentY;
 } AnimationToFrom;
@@ -34,7 +34,7 @@ typedef struct AnimationContinuous {
 
 typedef struct AnimationBezier {
     Animation anim;
-    int currentPoint;
+    int current_point;
     Vector2 points[BEZIER_STEPS];
 } AnimationBezier;
 

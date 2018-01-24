@@ -16,31 +16,31 @@
 #define RENDERER_AMT 3
 
 Node **renderers[RENDERER_AMT];
-Node *renderIndex_1 = NULL;
-Node *renderIndex_2 = NULL;
-Node *renderIndex_3 = NULL;
-Node *currentNode = NULL;
+Node *render_index_1 = NULL;
+Node *render_index_2 = NULL;
+Node *render_index_3 = NULL;
+Node *current_node = NULL;
 
-Sprite *renderSprite = NULL;
+Sprite *render_sprite = NULL;
 
 int speed1 = 5;
 int speed2 = 10;
 
-Node *cleanupSprite(Sprite *sprite, Node **renderIndex);
+Node *cleanup_sprite(Sprite *sprite, Node **render_index);
 
-int initializeRender() {
-    renderers[0] = &renderIndex_1;
-    renderers[1] = &renderIndex_2;
-    renderers[2] = &renderIndex_3;
+int initialize_render() {
+    renderers[0] = &render_index_1;
+    renderers[1] = &render_index_2;
+    renderers[2] = &render_index_3;
 
     int len = sizeof(renderers) / sizeof(renderers[0]);
 
     return 0;
 }
 
-void addToRender(Sprite *sprite, int zIndex)
+void add_to_render(Sprite *sprite, int z_index)
 {
-    Node **queue = renderers[zIndex];
+    Node **queue = renderers[z_index];
     check(sprite != NULL, "Bad sprite added to render queue");
     check(queue != NULL, "Array index out of range");
 
@@ -56,43 +56,43 @@ void render()
     clear();
     for(i = 0; i < RENDERER_AMT; i++) {
         if(*renderers[i] != NULL) {
-            Node *rendererCurrent = *renderers[i];
-            Node *updatedNode = NULL;
+            Node *renderer_current = *renderers[i];
+            Node *updated_node = NULL;
             int j = 0;
-            int queueCount = List_count(rendererCurrent);
-            currentNode = rendererCurrent;
-            for(j = 0; j < queueCount; j++) {
-                renderSprite = (Sprite*)currentNode->data;
+            int queue_count = List_count(renderer_current);
+            current_node = renderer_current;
+            for(j = 0; j < queue_count; j++) {
+                render_sprite = (Sprite*)current_node->data;
 
-                if(strstr(renderSprite->id, "Background") != NULL) {
-                    updateBackground(renderSprite->size);
+                if(strstr(render_sprite->id, "Background") != NULL) {
+                    update_background(render_sprite->size);
                 }
 
                 // Animation
-                if(renderSprite->frames > 0 || renderSprite->flags & FLAG_ANIMATING && renderSprite->animation) {
-                    animateSpriteRects(renderSprite);
+                if(render_sprite->frames > 0 || render_sprite->flags & FLAG_ANIMATING && render_sprite->animation) {
+                    animate_sprite_rects(render_sprite);
                 }
 
                 // Cleanup
-                if(renderSprite->flags & FLAG_REMOVE) {
-                    updatedNode = cleanupSprite(renderSprite, &rendererCurrent);
-                    renderSprite = NULL;
-                    if(queueCount == 1) {
+                if(render_sprite->flags & FLAG_REMOVE) {
+                    updated_node = cleanup_sprite(render_sprite, &renderer_current);
+                    render_sprite = NULL;
+                    if(queue_count == 1) {
                         *renderers[i] = NULL;
                         continue;
                     }
                 }
 
                 // Set the next current node
-                if(!updatedNode) {
-                    currentNode = currentNode->next;
+                if(!updated_node) {
+                    current_node = current_node->next;
                 } else {
-                    currentNode = updatedNode;
+                    current_node = updated_node;
                 }
 
-                if(renderSprite) {
-                    int flipTexture = (renderSprite->flags & FLAG_FLIPPED) ? 1 : 0;
-                    setTexture(renderer, renderSprite->texture, renderSprite->mask, renderSprite->size, flipTexture);
+                if(render_sprite) {
+                    int flip_texture = (render_sprite->flags & FLAG_FLIPPED) ? 1 : 0;
+                    set_texture(renderer, render_sprite->texture, render_sprite->mask, render_sprite->size, flip_texture);
                 }
             }
         }
@@ -101,14 +101,14 @@ void render()
     present();
 }
 
-void animateSpriteRects(Sprite *sprite)
+void animate_sprite_rects(Sprite *sprite)
 {
     SDL_Rect *mask = (SDL_RectEmpty(sprite->mask)) ? NULL : sprite->mask;
 
     // Do sprite frame animation
     if(sprite->frames > 0) {
-        int frameDelay = 100;
-        int frame = (SDL_GetTicks() / frameDelay) % sprite->frames;
+        int frame_delay = 100;
+        int frame = (SDL_GetTicks() / frame_delay) % sprite->frames;
         mask->y = frame * mask->h;
     }
 
@@ -117,14 +117,14 @@ void animateSpriteRects(Sprite *sprite)
         Animation *animation = (Animation *)sprite->animation;
         if(animation->type == TO_FROM) {
             AnimationToFrom *animation = sprite->animation;
-            if(!animation->anim.isAnimating) {
+            if(!animation->anim.is_animating) {
                 // Start the animation
                 sprite->size->x = animation->fromX;
                 sprite->size->y = animation->fromY;
-                animation->anim.isAnimating = 1;
+                animation->anim.is_animating = 1;
             } else {
                 // Continue the animation & add 'remove' flag when complete
-                if(sprite->size->y > animation->toY) {
+                if(sprite->size->y > animation->to_y) {
                     sprite->size->y -= speed2;
                 } else {
                     sprite->flags |= FLAG_REMOVE;
@@ -134,24 +134,24 @@ void animateSpriteRects(Sprite *sprite)
             AnimationContinuous *animation = sprite->animation;
             sprite->size->y += animation->speed;
         } else if(animation->type == BEZIER) {
-            if(animation->delay <= msElapsed) {
+            if(animation->delay <= ms_elapsed) {
                 AnimationBezier *animation = sprite->animation;
-                if(animation->currentPoint < BEZIER_STEPS) {
-                    animation->currentPoint++;
-                    sprite->size->x = (int)animation->points[animation->currentPoint].x;
-                    sprite->size->y = (int)animation->points[animation->currentPoint].y;
+                if(animation->current_point < BEZIER_STEPS) {
+                    animation->current_point++;
+                    sprite->size->x = (int)animation->points[animation->current_point].x;
+                    sprite->size->y = (int)animation->points[animation->current_point].y;
                 } else {
-                    /*debug("x: %d", (int)animation->points[animation->currentPoint].x);*/
-                    /*debug("y: %d", (int)animation->points[animation->currentPoint].y);*/
+                    /*debug("x: %d", (int)animation->points[animation->current_point].x);*/
+                    /*debug("y: %d", (int)animation->points[animation->current_point].y);*/
                 }
             }
         }
     }
 }
 
-Node *cleanupSprite(Sprite *sprite, Node **renderIndex)
+Node *cleanup_sprite(Sprite *sprite, Node **render_index)
 {
-    Node *updatedNode;
+    Node *updated_node;
 
     // Clean up the sprite
     if(sprite->flags & FLAG_REMOVE) {
@@ -162,27 +162,27 @@ Node *cleanupSprite(Sprite *sprite, Node **renderIndex)
         destroySprite(sprite);
 
         // Remove the node and get the next node
-        updatedNode = List_remove(renderIndex, currentNode->id);
+        updated_node = List_remove(render_index, current_node->id);
 
-        return updatedNode;
+        return updated_node;
     }
 
     return NULL;
 }
 
-void destroyRenderQueue()
+void destroy_render_queue()
 {
     int i;
     for(i = 0; i < RENDERER_AMT; i++) {
         if(*renderers[i] != NULL) {
-            Node *rendererCurrent = *renderers[i];
+            Node *renderer_current = *renderers[i];
             int j = 0;
-            int queueCount = List_count(rendererCurrent);
-            currentNode = rendererCurrent;
-            for(j = 0; j < queueCount; j++) {
-                renderSprite = (Sprite*)currentNode->data;
-                destroySprite(renderSprite);
-                currentNode = List_remove(&rendererCurrent, currentNode->id);
+            int queue_count = List_count(renderer_current);
+            current_node = renderer_current;
+            for(j = 0; j < queue_count; j++) {
+                render_sprite = (Sprite*)current_node->data;
+                destroySprite(render_sprite);
+                current_node = List_remove(&renderer_current, current_node->id);
             }
         }
     }

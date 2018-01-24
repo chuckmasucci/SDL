@@ -24,5 +24,5 @@ typedef struct Event {
     void (*handler)();
 } Event;
 
-int addEventListener(char *name, void (*handler)());
-int dispatchEvent(char *name);
+int add_event_listener(char *name, void (*handler)());
+int dispatch_event(char *name);

@@ -11,7 +11,7 @@
 
 // Declarations
 SDL_Rect *player;
-int initializePlayer();
+int initialize_player();
 void move(int direction, float delta);
 void shoot();
 

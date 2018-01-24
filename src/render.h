@@ -7,10 +7,10 @@
 
 #include "sprite.h"
 
-int initializeRender();
-void animateSpriteRects(Sprite *sprite);
+int initialize_render();
+void animate_sprite_rects(Sprite *sprite);
 void render();
-void addToRender();
-void destroyRenderQueue();
+void add_to_render();
+void destroy_render_queue();
 
 #endif

@@ -2,5 +2,5 @@
 #define spacegame_h
 #include <stdio.h>
 float delta;
-int msElapsed;
+int ms_elapsed;
 #endif
