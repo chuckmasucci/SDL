@@ -4,17 +4,17 @@
 #include <SDL2/SDL.h>
 
 typedef struct Sprite {
-    char *id;
-    float alpha;
-    char *path;
-    SDL_Rect *size;
-    SDL_Rect *mask;
+    int flags;
     int frames;
+    int is_animating;
     int visible;
+    float alpha;
+    char *id;
+    char *path;
+    SDL_Rect *mask;
+    SDL_Rect *size;
     SDL_Texture *texture;
     void *animation;
-    int flags;
-    int is_animating;
 } Sprite;
 
 SDL_Texture *create_sprite_texture(SDL_Renderer *renderer, char *imgPath, int alpha);

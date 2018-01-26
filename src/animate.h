@@ -1,6 +1,7 @@
 #ifndef animate_h
 #define animate_h
 #define BEZIER_STEPS 100
+#define STEPS 100
 
 #include <bezier.h>
 
@@ -8,23 +9,34 @@ enum AnimationType {
     TO_FROM = 1,
     CONTINUOUS = 2,
     FRAMES = 3,
-    BEZIER = 4
+    BEZIER = 4,
+    NORMAL = 5
 };
 
 typedef struct Animation {
-    enum AnimationType type;
-    int is_animating;
+    char *id;
     int delay;
+    int is_animating;
+    int from_alpha;
+    int from_x;
+    int from_y;
+    int to_alpha;
+    int to_x;
+    int to_y;
+    int steps_alpha[STEPS];
+    int steps_x[STEPS];
+    int steps_y[STEPS];
+    enum AnimationType type;
 } Animation;
 
 typedef struct AnimationToFrom {
     Animation anim;
-    int fromX;
-    int fromY;
-    int toX;
+    int from_x;
+    int from_y;
+    int to_x;
     int to_y;
-    int currentX;
-    int currentY;
+    int current_x;
+    int current_y;
 } AnimationToFrom;
 
 typedef struct AnimationContinuous {
@@ -35,7 +47,7 @@ typedef struct AnimationContinuous {
 typedef struct AnimationBezier {
     Animation anim;
     int current_point;
-    Vector2 points[BEZIER_STEPS];
+    Vector2 points[STEPS];
 } AnimationBezier;
 
 #endif

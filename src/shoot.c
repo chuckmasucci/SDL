@@ -51,9 +51,9 @@ void shoot()
     AnimationToFrom *animation;
     animation = malloc(sizeof(AnimationToFrom));
     check_mem(animation);
-    animation->fromX = player->x + (player->w / 2) - 3;
-    animation->toX = animation->fromX;
-    animation->fromY = player->y;
+    animation->from_x = player->x + (player->w / 2) - 3;
+    animation->to_x = animation->from_x;
+    animation->from_y = player->y;
     animation->to_y = 10;
     animation->anim = missle_animation;
 

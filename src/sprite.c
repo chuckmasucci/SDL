@@ -19,6 +19,14 @@ Sprite *create_sprite(char *id, char *path, int frames, float alpha, int visible
     sprite->is_animating = 0;
     sprite->animation = animation;
     sprite->flags = 0;
+    Animation *a = (Animation *)animation;
+    if(strcmp(id, "Enemy0") == 0) {
+        debug("sprite animation ptr: %p", a);
+        /*debug("id: %s", a->id);*/
+        /*debug("%s alpha step 10: %d", ((Animation *)animation)->id, ((Animation *)animation)->steps_alpha[10]);*/
+        /*debug("%s to_alpha: %d", ((Animation *)animation)->id, ((Animation *)animation)->to_alpha);*/
+        /*debug("alpha step 10: %d", a->steps_alpha[10]);*/
+    }
     return sprite;
 }
 
@@ -62,7 +70,7 @@ void destroySprite(Sprite *sprite)
         free(sprite->animation);
         Animation *animation = (Animation *)sprite->animation;
         if(animation->type == BEZIER) {
-            debug("bezier");
+            /*debug("bezier");*/
         }
     }
 

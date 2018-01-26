@@ -115,12 +115,21 @@ void animate_sprite_rects(Sprite *sprite)
     // Do x,y animation
     if(sprite->flags & FLAG_ANIMATING && sprite->animation)  {
         Animation *animation = (Animation *)sprite->animation;
+        /*debug("%s: size: %ld", sprite->id, sizeof(animation->steps_alpha));*/
+        if(animation->steps_alpha) {
+            for (int i = 0; i < STEPS; ++i) {
+                if(animation->steps_alpha[i]) {
+                    /*debug("%s: steps alpha: %d", sprite->id, animation->to_alpha);*/
+                    /*SDL_SetTextureAlphaMod(sprite->texture, animation->steps_alpha[i]);*/
+                }
+            }
+        }
         if(animation->type == TO_FROM) {
             AnimationToFrom *animation = sprite->animation;
             if(!animation->anim.is_animating) {
                 // Start the animation
-                sprite->size->x = animation->fromX;
-                sprite->size->y = animation->fromY;
+                sprite->size->x = animation->from_x;
+                sprite->size->y = animation->from_y;
                 animation->anim.is_animating = 1;
             } else {
                 // Continue the animation & add 'remove' flag when complete
@@ -135,14 +144,14 @@ void animate_sprite_rects(Sprite *sprite)
             sprite->size->y += animation->speed;
         } else if(animation->type == BEZIER) {
             if(animation->delay <= ms_elapsed) {
-                AnimationBezier *animation = sprite->animation;
-                if(animation->current_point < BEZIER_STEPS) {
+                AnimationBezier *animation = (AnimationBezier *)sprite->animation;
+                if(animation->current_point < STEPS-1) {
                     animation->current_point++;
-                    sprite->size->x = (int)animation->points[animation->current_point].x;
-                    sprite->size->y = (int)animation->points[animation->current_point].y;
+                    /*sprite->size->x = (int)animation->points[animation->current_point].x;*/
+                    /*sprite->size->y = (int)animation->points[animation->current_point].y;*/
                 } else {
-                    /*debug("x: %d", (int)animation->points[animation->current_point].x);*/
-                    /*debug("y: %d", (int)animation->points[animation->current_point].y);*/
+                    /*debug("x: %d: %d", animation->current_point, (int)animation->points[animation->current_point].x);*/
+                    /*debug("y: %d: %d", animation->current_point, (int)animation->points[animation->current_point].y);*/
                 }
             }
         }
