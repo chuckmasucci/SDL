@@ -25,11 +25,12 @@
 #define ENEMY_SPRITE "gfx/sprites/enemy.proto1.png"
 #define ENEMY_WIDTH 74
 #define ENEMY_HEIGHT 95
-#define ENEMY_COUNT 24
-#define ENEMY_COLUMNS 6
+#define ENEMY_COUNT 4
+// Columns show not be higher than enemy count
+#define ENEMY_COLUMNS 4
 #define ENEMY_ROWS (int)ceil((float)ENEMY_COUNT / (float)ENEMY_COLUMNS)
 
+void initialize_enemies();
 int add_enemy(Vector2 *animation_points);
-void position_enemies(/* Node **enemyHead*/);
 
 #endif

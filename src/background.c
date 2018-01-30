@@ -38,6 +38,7 @@ int initialize_background()
         animation_parent.to_alpha = 255;
         animation_parent.delay = 255;
         animation_parent.id = "BG";
+        animation_parent.steps_alpha[0] = -1;
 
         AnimationContinuous *background_animation;
         background_animation = malloc(sizeof(AnimationToFrom));
@@ -61,7 +62,6 @@ int initialize_background()
         Sprite *background_sprite = create_sprite(background_name, BACKGROUND_SPRITE, 0, 100, 1, background_size, NULL, background_animation);
         background_sprite->flags |= FLAG_ANIMATING;
         add_to_render(background_sprite, Z_RENDER_0);
-        debug("animation id: %s", ((Animation *)background_animation)->id);
     }
 
     return 0;

@@ -28,7 +28,8 @@ int speed2 = 10;
 
 Node *cleanup_sprite(Sprite *sprite, Node **render_index);
 
-int initialize_render() {
+int initialize_render()
+{
     renderers[0] = &render_index_1;
     renderers[1] = &render_index_2;
     renderers[2] = &render_index_3;
@@ -36,6 +37,11 @@ int initialize_render() {
     int len = sizeof(renderers) / sizeof(renderers[0]);
 
     return 0;
+}
+
+Node *get_render_list(int index)
+{
+    return *renderers[index];
 }
 
 void add_to_render(Sprite *sprite, int z_index)
@@ -92,6 +98,7 @@ void render()
 
                 if(render_sprite) {
                     int flip_texture = (render_sprite->flags & FLAG_FLIPPED) ? 1 : 0;
+                    /*SDL_SetTextureAlphaMod(render_sprite->texture, 128);*/
                     set_texture(renderer, render_sprite->texture, render_sprite->mask, render_sprite->size, flip_texture);
                 }
             }
@@ -115,15 +122,17 @@ void animate_sprite_rects(Sprite *sprite)
     // Do x,y animation
     if(sprite->flags & FLAG_ANIMATING && sprite->animation)  {
         Animation *animation = (Animation *)sprite->animation;
-        /*debug("%s: size: %ld", sprite->id, sizeof(animation->steps_alpha));*/
-        if(animation->steps_alpha) {
-            for (int i = 0; i < STEPS; ++i) {
-                if(animation->steps_alpha[i]) {
-                    /*debug("%s: steps alpha: %d", sprite->id, animation->to_alpha);*/
-                    /*SDL_SetTextureAlphaMod(sprite->texture, animation->steps_alpha[i]);*/
+
+        if(animation->delay <= ms_elapsed) {
+            if(animation->steps_alpha[0] != -1) {
+                int current_alpha = animation->steps_alpha[animation->current_step];
+                if(animation->steps_alpha[animation->current_step] > -1 && animation->current_step < STEPS) {
+                    SDL_SetTextureAlphaMod(sprite->texture, current_alpha);
+                    animation->current_step++;
                 }
             }
         }
+
         if(animation->type == TO_FROM) {
             AnimationToFrom *animation = sprite->animation;
             if(!animation->anim.is_animating) {
@@ -147,8 +156,8 @@ void animate_sprite_rects(Sprite *sprite)
                 AnimationBezier *animation = (AnimationBezier *)sprite->animation;
                 if(animation->current_point < STEPS-1) {
                     animation->current_point++;
-                    /*sprite->size->x = (int)animation->points[animation->current_point].x;*/
-                    /*sprite->size->y = (int)animation->points[animation->current_point].y;*/
+                    sprite->size->x = (int)animation->points[animation->current_point].x;
+                    sprite->size->y = (int)animation->points[animation->current_point].y;
                 } else {
                     /*debug("x: %d: %d", animation->current_point, (int)animation->points[animation->current_point].x);*/
                     /*debug("y: %d: %d", animation->current_point, (int)animation->points[animation->current_point].y);*/

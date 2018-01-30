@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     initialize_player();
 
     // Initialize enemy
-    position_enemies();
+    initialize_enemies();
 
     // Generate the background data
     initialize_background();

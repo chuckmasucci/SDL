@@ -8,7 +8,7 @@ typedef struct Sprite {
     int frames;
     int is_animating;
     int visible;
-    float alpha;
+    int alpha;
     char *id;
     char *path;
     SDL_Rect *mask;

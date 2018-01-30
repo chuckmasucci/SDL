@@ -15,6 +15,7 @@ enum AnimationType {
 
 typedef struct Animation {
     char *id;
+    int current_step;
     int delay;
     int is_animating;
     int from_alpha;

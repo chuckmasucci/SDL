@@ -5,9 +5,11 @@
 #define Z_RENDER_1 1
 #define Z_RENDER_2 2
 
+#include <list.h>
 #include "sprite.h"
 
 int initialize_render();
+Node *get_render_list(int index);
 void animate_sprite_rects(Sprite *sprite);
 void render();
 void add_to_render();
