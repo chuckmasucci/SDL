@@ -19,12 +19,6 @@ int main(int argc, char *argv[])
     int is_right_key_down = 0;
     int move_direction = 0;
 
-    // Initialize timing variables
-    float freq;
-    Uint64 now;
-    Uint64 last_time = SDL_GetPerformanceCounter();
-    float delta;
-
     // Start graphics
     initialize_gfx();
 
@@ -40,14 +34,18 @@ int main(int argc, char *argv[])
     // Generate the background data
     initialize_background();
 
+    // Initialize timing variables
+    float delta;
+    float freq;
+    Uint64 now;
+    Uint64 last_time = SDL_GetPerformanceCounter();
+
     // The loop
     while(running) {
         // Timing variables
         freq = SDL_GetPerformanceFrequency();
         now = SDL_GetPerformanceCounter();
         delta = ((now - last_time) / freq);
-        ms_elapsed = SDL_GetTicks();
-        /*debug("ms_elapsed: %d", ms_elapsed);*/
 
         SDL_Event event;
         if(SDL_PollEvent(&event)) {
@@ -87,8 +85,19 @@ int main(int argc, char *argv[])
             }
         }
 
+        // Calculations for FPS maintenance
+        int fps = 1000/FPS;
+        int delta_ms = (int)(delta * 1000);
+        int delay = fps - delta_ms;
+        if(delay > 0) {
+            SDL_Delay(delay);
+        }
+
         // Update the timing variable
         last_time = now;
+
+        // Render
+        render();
 
         // Determine if movement key is pressed and move the player
         if(is_left_key_down) {
@@ -97,7 +106,6 @@ int main(int argc, char *argv[])
             move(move_direction, delta);
         }
 
-        render(delta);
     }
 
     destroy_render_queue();

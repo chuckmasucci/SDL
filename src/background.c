@@ -39,9 +39,11 @@ int initialize_background()
         animation_parent.delay = 255;
         animation_parent.id = "BG";
         animation_parent.steps_alpha[0] = -1;
+        animation_parent.steps_x = NULL;
+        animation_parent.steps_y = NULL;
 
         AnimationContinuous *background_animation;
-        background_animation = malloc(sizeof(AnimationToFrom));
+        background_animation = malloc(sizeof(AnimationContinuous));
         check_mem(background_animation);
         background_animation->speed = BACKGROUND_SPEED;
         background_animation->anim = animation_parent;
@@ -59,7 +61,7 @@ int initialize_background()
         check_mem(background_name);
         sprintf(background_name, "Background%d", x);
 
-        Sprite *background_sprite = create_sprite(background_name, BACKGROUND_SPRITE, 0, 100, 1, background_size, NULL, background_animation);
+        Sprite *background_sprite = create_sprite(background_name, BACKGROUND_SPRITE, 0, background_size, NULL, background_animation);
         background_sprite->flags |= FLAG_ANIMATING;
         add_to_render(background_sprite, Z_RENDER_0);
     }

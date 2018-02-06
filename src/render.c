@@ -23,7 +23,6 @@ Node *current_node = NULL;
 
 Sprite *render_sprite = NULL;
 
-int speed1 = 5;
 int speed2 = 10;
 
 Node *cleanup_sprite(Sprite *sprite, Node **render_index);
@@ -47,6 +46,7 @@ Node *get_render_list(int index)
 void add_to_render(Sprite *sprite, int z_index)
 {
     Node **queue = renderers[z_index];
+    /*debug("queue: %p", queue);*/
     check(sprite != NULL, "Bad sprite added to render queue");
     check(queue != NULL, "Array index out of range");
 
@@ -75,9 +75,13 @@ void render()
                 }
 
                 // Animation
-                if(render_sprite->frames > 0 || render_sprite->flags & FLAG_ANIMATING && render_sprite->animation) {
-                    animate_sprite_rects(render_sprite);
+                int animation_count = List_count(((Node *)render_sprite->animations));
+                if(animation_count > 0) {
+                    animate(render_sprite);
                 }
+                /*if(render_sprite->frames > 0 || render_sprite->flags & FLAG_ANIMATING && render_sprite->animation) {*/
+                    /*animate(render_sprite);*/
+                /*}*/
 
                 // Cleanup
                 if(render_sprite->flags & FLAG_REMOVE) {
@@ -108,63 +112,121 @@ void render()
     present();
 }
 
-void animate_sprite_rects(Sprite *sprite)
+void animate_default(Sprite *sprite)
 {
+    debug("animate sprite: %s", sprite->id);
+    /*Animation *animation = (Animation *)sprite->animation;*/
+    /*if(animation->steps_alpha[0] != -1) {*/
+        /*int current_alpha = animation->steps_alpha[animation->current_step];*/
+        /*if(animation->steps_alpha[animation->current_step] > -1 && animation->current_step < STEPS) {*/
+            /*SDL_SetTextureAlphaMod(sprite->texture, current_alpha);*/
+            /*animation->current_step++;*/
+        /*}*/
+    /*}*/
+
+    /*if(animation->steps_x != NULL) {*/
+        /*sprite->size->x = ((int *)animation->steps_x)[animation->current_step_xy];*/
+        /*debug("sprite %s", sprite->id);*/
+        /*[>debug("animation steps x: %p, y: %p", animation->steps_x, animation->steps_y);<]*/
+        /*[>debug("%d: sprite x: %d", animation->current_step_xy, ((int *)animation->steps_x)[animation->current_step_xy]);<]*/
+    /*}*/
+
+    /*if(animation->steps_y != NULL[> && ((Animation *)sprite->animation)->steps_y != NULL<]) {*/
+        /*sprite->size->y = ((int *)animation->steps_y)[animation->current_step_xy];*/
+    /*}*/
+    /*if(animation->current_step_xy < 100) {*/
+        /*animation->current_step_xy++;*/
+    /*} else {*/
+        /*animation->current_step_xy = 0;*/
+    /*}*/
+}
+
+void animate_sprite_frames(Sprite *sprite)
+{
+    check(sprite != NULL, "Invalid sprite");
+
     SDL_Rect *mask = (SDL_RectEmpty(sprite->mask)) ? NULL : sprite->mask;
+    int frame = (SDL_GetTicks() / SPRITE_FRAME_DELAY) % sprite->frames;
+    mask->y = frame * mask->h;
+
+error:
+    return;
+}
+
+void animate(Sprite *sprite)
+{
+    // Get animation list
+    Node *animations = (Node *)sprite->animations;
 
     // Do sprite frame animation
     if(sprite->frames > 0) {
-        int frame_delay = 100;
-        int frame = (SDL_GetTicks() / frame_delay) % sprite->frames;
-        mask->y = frame * mask->h;
+        animate_sprite_frames(sprite);
     }
 
-    // Do x,y animation
-    if(sprite->flags & FLAG_ANIMATING && sprite->animation)  {
-        Animation *animation = (Animation *)sprite->animation;
-
-        if(animation->delay <= ms_elapsed) {
-            if(animation->steps_alpha[0] != -1) {
-                int current_alpha = animation->steps_alpha[animation->current_step];
-                if(animation->steps_alpha[animation->current_step] > -1 && animation->current_step < STEPS) {
-                    SDL_SetTextureAlphaMod(sprite->texture, current_alpha);
+    int animation_count = List_count(animations);
+    Animation2 *animation = ((Animation2 *)sprite->animations->data);
+    for(int i = 0; i < animation_count; i++) {
+        switch(animation->type) {
+            case ATTR_X:
+                debug("%s: x delay: %d, to: %d, from: %d, value: %d, current_step: %d", sprite->id, animation->delay, animation->to, animation->from, animation->steps[animation->current_step], animation->current_step);
+                if(animation->current_step < animation->steps_total) {
                     animation->current_step++;
                 }
-            }
-        }
-
-        if(animation->type == TO_FROM) {
-            AnimationToFrom *animation = sprite->animation;
-            if(!animation->anim.is_animating) {
-                // Start the animation
-                sprite->size->x = animation->from_x;
-                sprite->size->y = animation->from_y;
-                animation->anim.is_animating = 1;
-            } else {
-                // Continue the animation & add 'remove' flag when complete
-                if(sprite->size->y > animation->to_y) {
-                    sprite->size->y -= speed2;
-                } else {
-                    sprite->flags |= FLAG_REMOVE;
+                break;
+            case ATTR_Y:
+                debug("%s: y delay: %d, to: %d, from: %d, value: %d, current_step: %d", sprite->id, animation->delay, animation->to, animation->from, animation->steps[animation->current_step], animation->current_step);
+                if(animation->current_step < animation->steps_total) {
+                    animation->current_step++;
                 }
-            }
-        } else if(animation->type == CONTINUOUS) {
-            AnimationContinuous *animation = sprite->animation;
-            sprite->size->y += animation->speed;
-        } else if(animation->type == BEZIER) {
-            if(animation->delay <= ms_elapsed) {
-                AnimationBezier *animation = (AnimationBezier *)sprite->animation;
-                if(animation->current_point < STEPS-1) {
-                    animation->current_point++;
-                    sprite->size->x = (int)animation->points[animation->current_point].x;
-                    sprite->size->y = (int)animation->points[animation->current_point].y;
-                } else {
-                    /*debug("x: %d: %d", animation->current_point, (int)animation->points[animation->current_point].x);*/
-                    /*debug("y: %d: %d", animation->current_point, (int)animation->points[animation->current_point].y);*/
-                }
-            }
+                break;
         }
+        animation = ((Animation2 *)sprite->animations->next->data);
     }
+    /*if(animation->delay <= ms_elapsed) {*/
+        /*animate_default(sprite);*/
+    /*}*/
+
+    // Do x,y animation
+    /*if(sprite->flags & FLAG_ANIMATING && sprite->animation)  {*/
+        /*Animation *animation = (Animation *)sprite->animation;*/
+
+        /*if(animation->delay <= ms_elapsed) {*/
+            /*animate_default(sprite);*/
+        /*}*/
+
+        /*if(animation->type == TO_FROM) {*/
+            /*[>if(!animation->is_animating) {<]*/
+                /*[>// Start the animation<]*/
+                /*[>sprite->size->x = animation->from_x;<]*/
+                /*[>sprite->size->y = animation->from_y;<]*/
+                /*[>animation->is_animating = 1;<]*/
+            /*[>} else {<]*/
+                /*[>// Continue the animation & add 'remove' flag when complete<]*/
+                /*[>if(sprite->size->y > animation->to_y) {<]*/
+                    /*[>sprite->size->y -= speed2;<]*/
+                /*[>} else {<]*/
+                    /*[>sprite->flags |= FLAG_REMOVE;<]*/
+                /*[>}<]*/
+            /*[>}<]*/
+        /*} else if(animation->type == CONTINUOUS) {*/
+            /*AnimationContinuous *animation = sprite->animation;*/
+            /*sprite->size->y += animation->speed;*/
+        /*} else if(animation->type == BEZIER) {*/
+            /*if(animation->delay <= ms_elapsed) {*/
+                /*AnimationBezier *animation = (AnimationBezier *)sprite->animation;*/
+                /*if(animation->current_point < STEPS-1) {*/
+                    /*animation->current_point++;*/
+                    /*[>debug("%s: id: %d: %d", sprite->id, animation->current_point, (int)animation->points[animation->current_point].x);<]*/
+                    /*[>debug("%s: id: %d: %d", sprite->id, animation->current_point, (int)animation->points[animation->current_point].y);<]*/
+                    /*sprite->size->x = (int)animation->points[animation->current_point].x;*/
+                    /*sprite->size->y = (int)animation->points[animation->current_point].y;*/
+                /*} else {*/
+                    /*[>debug("x: %d: %d", animation->current_point, (int)animation->points[animation->current_point].x);<]*/
+                    /*[>debug("y: %d: %d", animation->current_point, (int)animation->points[animation->current_point].y);<]*/
+                /*}*/
+            /*}*/
+        /*}*/
+    /*}*/
 }
 
 Node *cleanup_sprite(Sprite *sprite, Node **render_index)

@@ -31,7 +31,7 @@ int initialize_player() {
     char *player_name = malloc(10 * sizeof(char));
     check_mem(player_name);
     strncpy(player_name, "Player", 10);
-    Sprite *player_sprite = create_sprite(player_name, SHIP_SPRITE, 4, 255, 1, player, player_mask, NULL);
+    Sprite *player_sprite = create_sprite(player_name, SHIP_SPRITE, 4, player, player_mask, NULL);
     add_to_render(player_sprite, Z_RENDER_0);
 
     return 0;

@@ -1,25 +1,34 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
+#include <list.h>
 #include "animate.h"
 #include "dbg.h"
 #include "sprite.h"
 #include "gfx.h"
 
-Sprite *create_sprite(char *id, char *path, int frames, float alpha, int visible, SDL_Rect *size, SDL_Rect *mask, void *animation) {
+Sprite *create_sprite(char *id, char *path, int frames, SDL_Rect *size, SDL_Rect *mask, void *animation)
+{
     Sprite *sprite = malloc(sizeof(Sprite));
-    sprite->id = id;
-    sprite->alpha = alpha;
-    sprite->frames = frames;
-    sprite->path = path;
-    sprite->visible = 1;
-    sprite->size = size;
-    sprite->mask = mask;
-    sprite->texture = create_sprite_texture(renderer, path, alpha);
-    sprite->is_animating = 0;
+    /*sprite->animations = malloc(sizeof(Node));*/
+    sprite->animations = NULL;
     sprite->animation = animation;
+    sprite->alpha = ALPHA_MAX;
     sprite->flags = 0;
+    sprite->frames = frames;
+    sprite->id = id;
+    sprite->is_animating = 0;
+    sprite->mask = mask;
+    sprite->path = path;
+    sprite->size = size;
+    sprite->texture = create_sprite_texture(renderer, path, ALPHA_MAX);
+    sprite->visible = 1;
     return sprite;
+}
+
+void add_animation(Sprite *sprite, Animation2 *animation)
+{
+    List_push(&sprite->animations, animation);
 }
 
 SDL_Texture *create_sprite_texture(SDL_Renderer *renderer, char *imgPath, int alpha)

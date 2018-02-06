@@ -10,7 +10,7 @@
 
 int initialize_render();
 Node *get_render_list(int index);
-void animate_sprite_rects(Sprite *sprite);
+void animate(Sprite *sprite);
 void render();
 void add_to_render();
 void destroy_render_queue();
