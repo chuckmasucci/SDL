@@ -166,18 +166,19 @@ void animate(Sprite *sprite)
     int animation_count = List_count(animations);
     Animation2 *animation = ((Animation2 *)sprite->animations->data);
     for(int i = 0; i < animation_count; i++) {
+        if(animation->current_step < animation->steps_total) {
+            animation->current_step++;
+        } else {
+            sprite->flags |= FLAG_REMOVE;
+        }
         switch(animation->type) {
             case ATTR_X:
-                debug("%s: x delay: %d, to: %d, from: %d, value: %d, current_step: %d", sprite->id, animation->delay, animation->to, animation->from, animation->steps[animation->current_step], animation->current_step);
-                if(animation->current_step < animation->steps_total) {
-                    animation->current_step++;
-                }
+                /*debug("%s: x delay: %d, to: %d, from: %d, value: %d, current_step: %d", sprite->id, animation->delay, animation->to, animation->from, animation->steps[animation->current_step], animation->current_step);*/
+                sprite->size->x = animation->steps[animation->current_step];
                 break;
             case ATTR_Y:
-                debug("%s: y delay: %d, to: %d, from: %d, value: %d, current_step: %d", sprite->id, animation->delay, animation->to, animation->from, animation->steps[animation->current_step], animation->current_step);
-                if(animation->current_step < animation->steps_total) {
-                    animation->current_step++;
-                }
+                /*debug("%s: y delay: %d, to: %d, from: %d, value: %d, current_step: %d", sprite->id, animation->delay, animation->to, animation->from, animation->steps[animation->current_step], animation->current_step);*/
+                sprite->size->y = animation->steps[animation->current_step];
                 break;
         }
         animation = ((Animation2 *)sprite->animations->next->data);
