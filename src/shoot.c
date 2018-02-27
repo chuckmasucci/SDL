@@ -21,6 +21,7 @@
 #include <dbg.h>
 #include "animate.h"
 #include "easing.h"
+#include "event.h"
 #include "flags.h"
 #include "gfx.h"
 #include "render.h"
@@ -37,6 +38,8 @@ SDL_Rect missle = {
     .h = MISSLE_HEIGHT
 };
 
+void animation_complete(Sprite *sprite);
+
 void shoot()
 {
     SDL_Rect *size = malloc(sizeof(SDL_Rect));
@@ -47,8 +50,8 @@ void shoot()
     size->h = MISSLE_HEIGHT;
 
     // Create animations for needed attributes
-    Animation2 *animation_x = add_animation_attrs(0, player->x + (player->w / 2) - 3, player->x + (player->w / 2) - 3, 2000, ATTR_X);
-    Animation2 *animation_y = add_animation_attrs(0, player->y, 10, 2000, ATTR_Y);
+    Animation2 *animation_x = add_animation_attrs(ATTR_X, 0, player->x + (player->w / 2) - 3, player->x + (player->w / 2) - 3, 2000, 0);
+    Animation2 *animation_y = add_animation_attrs(ATTR_Y, 0, player->y, 10, 2000, 0);
 
     // Missle id
     Sprite *missle_sprite = NULL;
@@ -68,8 +71,15 @@ void shoot()
     add_animation(missle_sprite, animation_x);
     add_animation(missle_sprite, animation_y);
 
+    add_event_listener(sprite_name, ((void *)animation_complete), ((void *)missle_sprite));
+
     return;
 
 error:
     log_err("Error while shooting");
+}
+
+void animation_complete(Sprite *sprite) {
+    sprite->flags |= FLAG_REMOVE;
+    debug("add remove flag");
 }

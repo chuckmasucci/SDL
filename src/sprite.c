@@ -4,6 +4,7 @@
 #include <list.h>
 #include "animate.h"
 #include "dbg.h"
+#include "flags.h"
 #include "sprite.h"
 #include "gfx.h"
 
@@ -52,8 +53,30 @@ error:
     return NULL;
 }
 
-void destroySprite(Sprite *sprite)
+Node *cleanup_sprite(Sprite *sprite, Node **render_index, int node_id)
 {
+    Node *updated_node;
+
+    // Clean up the sprite
+    if(sprite->flags & FLAG_REMOVE) {
+        // Remove the flag
+        sprite->flags &= ~(FLAG_REMOVE);
+
+        // Destroy the sprite
+        destroy_sprite(sprite);
+
+        // Remove the node and get the next node
+        updated_node = List_remove(render_index, node_id);
+
+        return updated_node;
+    }
+
+    return NULL;
+}
+
+void destroy_sprite(Sprite *sprite)
+{
+    debug("destroy sprite");
     if(sprite->id) {
         free(sprite->id);
     }

@@ -6,6 +6,7 @@
 #include <list.h>
 #include "animate.h"
 #include "background.h"
+#include "event.h"
 #include "flags.h"
 #include "gfx.h"
 #include "player.h"
@@ -25,7 +26,7 @@ Sprite *render_sprite = NULL;
 
 int speed2 = 10;
 
-Node *cleanup_sprite(Sprite *sprite, Node **render_index);
+int get_total_animation_duration(Node *animations);
 
 int initialize_render()
 {
@@ -70,12 +71,12 @@ void render()
             for(j = 0; j < queue_count; j++) {
                 render_sprite = (Sprite*)current_node->data;
 
-                if(strstr(render_sprite->id, "Background") != NULL) {
-                    update_background(render_sprite->size);
-                }
+                /*if(strstr(render_sprite->id, "Background") != NULL) {*/
+                    /*update_background(render_sprite->size);*/
+                /*}*/
 
                 // Animation
-                int animation_count = List_count(((Node *)render_sprite->animations));
+                int animation_count = List_count(render_sprite->animations);
                 if(animation_count > 0) {
                     animate(render_sprite);
                 }
@@ -85,7 +86,7 @@ void render()
 
                 // Cleanup
                 if(render_sprite->flags & FLAG_REMOVE) {
-                    updated_node = cleanup_sprite(render_sprite, &renderer_current);
+                    updated_node = cleanup_sprite(render_sprite, &renderer_current, current_node->id);
                     render_sprite = NULL;
                     if(queue_count == 1) {
                         *renderers[i] = NULL;
@@ -102,43 +103,16 @@ void render()
 
                 if(render_sprite) {
                     int flip_texture = (render_sprite->flags & FLAG_FLIPPED) ? 1 : 0;
-                    /*SDL_SetTextureAlphaMod(render_sprite->texture, 128);*/
                     set_texture(renderer, render_sprite->texture, render_sprite->mask, render_sprite->size, flip_texture);
                 }
             }
         }
     }
-
     present();
 }
 
 void animate_default(Sprite *sprite)
 {
-    debug("animate sprite: %s", sprite->id);
-    /*Animation *animation = (Animation *)sprite->animation;*/
-    /*if(animation->steps_alpha[0] != -1) {*/
-        /*int current_alpha = animation->steps_alpha[animation->current_step];*/
-        /*if(animation->steps_alpha[animation->current_step] > -1 && animation->current_step < STEPS) {*/
-            /*SDL_SetTextureAlphaMod(sprite->texture, current_alpha);*/
-            /*animation->current_step++;*/
-        /*}*/
-    /*}*/
-
-    /*if(animation->steps_x != NULL) {*/
-        /*sprite->size->x = ((int *)animation->steps_x)[animation->current_step_xy];*/
-        /*debug("sprite %s", sprite->id);*/
-        /*[>debug("animation steps x: %p, y: %p", animation->steps_x, animation->steps_y);<]*/
-        /*[>debug("%d: sprite x: %d", animation->current_step_xy, ((int *)animation->steps_x)[animation->current_step_xy]);<]*/
-    /*}*/
-
-    /*if(animation->steps_y != NULL[> && ((Animation *)sprite->animation)->steps_y != NULL<]) {*/
-        /*sprite->size->y = ((int *)animation->steps_y)[animation->current_step_xy];*/
-    /*}*/
-    /*if(animation->current_step_xy < 100) {*/
-        /*animation->current_step_xy++;*/
-    /*} else {*/
-        /*animation->current_step_xy = 0;*/
-    /*}*/
 }
 
 void animate_sprite_frames(Sprite *sprite)
@@ -157,20 +131,24 @@ void animate(Sprite *sprite)
 {
     // Get animation list
     Node *animations = (Node *)sprite->animations;
+    Node *current_node = animations;
+    Node *next_node = NULL;
 
     // Do sprite frame animation
     if(sprite->frames > 0) {
         animate_sprite_frames(sprite);
     }
-
+    Animation2 *animation = NULL;
     int animation_count = List_count(animations);
-    Animation2 *animation = ((Animation2 *)sprite->animations->data);
+    int duration_total = get_total_animation_duration(animations);
+
     for(int i = 0; i < animation_count; i++) {
+        animation = current_node->data;
+
         if(animation->current_step < animation->steps_total) {
             animation->current_step++;
-        } else {
-            sprite->flags |= FLAG_REMOVE;
         }
+
         switch(animation->type) {
             case ATTR_X:
                 /*debug("%s: x delay: %d, to: %d, from: %d, value: %d, current_step: %d", sprite->id, animation->delay, animation->to, animation->from, animation->steps[animation->current_step], animation->current_step);*/
@@ -179,76 +157,48 @@ void animate(Sprite *sprite)
             case ATTR_Y:
                 /*debug("%s: y delay: %d, to: %d, from: %d, value: %d, current_step: %d", sprite->id, animation->delay, animation->to, animation->from, animation->steps[animation->current_step], animation->current_step);*/
                 sprite->size->y = animation->steps[animation->current_step];
+                debug("y: %d", sprite->size->y);
                 break;
         }
-        animation = ((Animation2 *)sprite->animations->next->data);
+
+        if(animation->time_start == 0 && animation->time_end == 0) {
+            animation->time_start = SDL_GetTicks();
+            animation->time_end = animation->delay + animation->time_start + animation->time;
+        }
+
+        next_node = current_node->next;
+
+        if(SDL_GetTicks() >= animation->time_end) {
+            next_node = List_remove(&sprite->animations, current_node->id);
+            if(!next_node) {
+                sprite->animations = NULL;
+                debug("dispatch event");
+                dispatch_event(sprite->id);
+                break;
+            }
+        }
+
+        current_node = next_node;
     }
-    /*if(animation->delay <= ms_elapsed) {*/
-        /*animate_default(sprite);*/
-    /*}*/
-
-    // Do x,y animation
-    /*if(sprite->flags & FLAG_ANIMATING && sprite->animation)  {*/
-        /*Animation *animation = (Animation *)sprite->animation;*/
-
-        /*if(animation->delay <= ms_elapsed) {*/
-            /*animate_default(sprite);*/
-        /*}*/
-
-        /*if(animation->type == TO_FROM) {*/
-            /*[>if(!animation->is_animating) {<]*/
-                /*[>// Start the animation<]*/
-                /*[>sprite->size->x = animation->from_x;<]*/
-                /*[>sprite->size->y = animation->from_y;<]*/
-                /*[>animation->is_animating = 1;<]*/
-            /*[>} else {<]*/
-                /*[>// Continue the animation & add 'remove' flag when complete<]*/
-                /*[>if(sprite->size->y > animation->to_y) {<]*/
-                    /*[>sprite->size->y -= speed2;<]*/
-                /*[>} else {<]*/
-                    /*[>sprite->flags |= FLAG_REMOVE;<]*/
-                /*[>}<]*/
-            /*[>}<]*/
-        /*} else if(animation->type == CONTINUOUS) {*/
-            /*AnimationContinuous *animation = sprite->animation;*/
-            /*sprite->size->y += animation->speed;*/
-        /*} else if(animation->type == BEZIER) {*/
-            /*if(animation->delay <= ms_elapsed) {*/
-                /*AnimationBezier *animation = (AnimationBezier *)sprite->animation;*/
-                /*if(animation->current_point < STEPS-1) {*/
-                    /*animation->current_point++;*/
-                    /*[>debug("%s: id: %d: %d", sprite->id, animation->current_point, (int)animation->points[animation->current_point].x);<]*/
-                    /*[>debug("%s: id: %d: %d", sprite->id, animation->current_point, (int)animation->points[animation->current_point].y);<]*/
-                    /*sprite->size->x = (int)animation->points[animation->current_point].x;*/
-                    /*sprite->size->y = (int)animation->points[animation->current_point].y;*/
-                /*} else {*/
-                    /*[>debug("x: %d: %d", animation->current_point, (int)animation->points[animation->current_point].x);<]*/
-                    /*[>debug("y: %d: %d", animation->current_point, (int)animation->points[animation->current_point].y);<]*/
-                /*}*/
-            /*}*/
-        /*}*/
-    /*}*/
 }
 
-Node *cleanup_sprite(Sprite *sprite, Node **render_index)
+int get_total_animation_duration(Node *animations)
 {
-    Node *updated_node;
+    int animation_count = List_count(animations);
+    Node *current_animation = animations;
+    int max = 0;
 
-    // Clean up the sprite
-    if(sprite->flags & FLAG_REMOVE) {
-        // Remove the flag
-        sprite->flags &= ~(FLAG_REMOVE);
+    for(int i = 0; i < animation_count; i++) {
+        Animation2 *animation = ((Animation2 *)current_animation->data);
+        int current_duration = animation->delay + animation->time;
 
-        // Destroy the sprite
-        destroySprite(sprite);
-
-        // Remove the node and get the next node
-        updated_node = List_remove(render_index, current_node->id);
-
-        return updated_node;
+        if(current_duration > max) {
+            max = current_duration;
+        }
+        current_animation = animations->next;
     }
 
-    return NULL;
+    return max;
 }
 
 void destroy_render_queue()
@@ -262,7 +212,7 @@ void destroy_render_queue()
             current_node = renderer_current;
             for(j = 0; j < queue_count; j++) {
                 render_sprite = (Sprite*)current_node->data;
-                destroySprite(render_sprite);
+                destroy_sprite(render_sprite);
                 current_node = List_remove(&renderer_current, current_node->id);
             }
         }

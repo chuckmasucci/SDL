@@ -21,7 +21,7 @@
 #include "easing.h"
 #include "gfx.h"
 
-Animation2 *add_animation_attrs(int delay, int from, int to, int time, int type)
+Animation2 *add_animation_attrs(int type, int delay, int from, int to, int time, int loop)
 {
     Animation2 *animation;
     animation = malloc(sizeof(Animation2));
@@ -30,10 +30,11 @@ Animation2 *add_animation_attrs(int delay, int from, int to, int time, int type)
     animation->to = to;
     animation->time = time;
     animation->type = type;
+    animation->time_start = 0;
+    animation->time_end = 0;
 
     animation->current_step = 0;
     animation->steps = 0;
-
 
     int delta = from - to;
     int steps_total = FPS * (time / 1000);
@@ -44,8 +45,8 @@ Animation2 *add_animation_attrs(int delay, int from, int to, int time, int type)
 
     for(int i = 0; i <= steps_total; i++) {
         float ratio = (float)i / steps_total;
-        // This needs to come from an argument - function pointer
-        AHFloat ease = CubicEaseIn(ratio);
+        // TODO: This needs to come from an argument - function pointer
+        AHFloat ease = LinearInterpolation(ratio);
         int step = ((int)floor(delta) * (reverse_ease - ease)) + to;
         steps[i] = step;
     }

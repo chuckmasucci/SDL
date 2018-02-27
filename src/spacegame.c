@@ -39,13 +39,17 @@ int main(int argc, char *argv[])
     float freq;
     Uint64 now;
     Uint64 last_time = SDL_GetPerformanceCounter();
+    Uint32 start_time = SDL_GetTicks();
+    int runtime = 0;
 
     // The loop
     while(running) {
         // Timing variables
         freq = SDL_GetPerformanceFrequency();
         now = SDL_GetPerformanceCounter();
+        runtime = (SDL_GetTicks() - start_time) / 1000;
         delta = ((now - last_time) / freq);
+        /*debug("runtime: %d", runtime);*/
 
         SDL_Event event;
         if(SDL_PollEvent(&event)) {

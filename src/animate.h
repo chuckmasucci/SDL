@@ -26,11 +26,14 @@ typedef struct Animation2 {
     uint delay;
     int from;
     int to;
+    uint loop;
     uint time;
     uint type;
     uint current_step;
     uint steps_total;
     int *steps;
+    uint time_start;
+    uint time_end;
 } Animation2;
 
 typedef struct Animation {
@@ -63,6 +66,6 @@ typedef struct AnimationBezier {
     Vector2 points[STEPS];
 } AnimationBezier;
 
-Animation2 *add_animation_attrs(int delay, int from, int to, int time, int type);
+Animation2 *add_animation_attrs(int type, int delay, int from, int to, int time, int loop);
 
 #endif

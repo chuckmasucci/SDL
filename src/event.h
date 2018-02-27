@@ -16,13 +16,13 @@
  *
  * =====================================================================================
  */
-
-#define SECOND_ELAPSED "second_elapsed"
+#include "sprite.h"
 
 typedef struct Event {
     char *name;
     void (*handler)();
+    void *arg;
 } Event;
 
-int add_event_listener(char *name, void (*handler)());
+int add_event_listener(char *name, void (*handler)(void *), void *arg);
 int dispatch_event(char *name);

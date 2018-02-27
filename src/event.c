@@ -19,16 +19,18 @@
 #include <dbg.h>
 #include <list.h>
 #include "event.h"
+#include "sprite.h"
 
 Node *event_stack = NULL;
 
-int add_event_listener(char *name, void (*handler)(void))
+int add_event_listener(char *name, void (*handler)(void *), void *arg)
 {
     Event *event;
     event = malloc(sizeof(Event));
     event->name = malloc(sizeof(name));
     strcpy(event->name, name);
     event->handler = handler;
+    event->arg = arg;
 
     List_push(&event_stack, event);
 
@@ -41,7 +43,7 @@ int dispatch_event(char *name)
     Event *event = (Event *)event_stack->data;
     for(int i = 0; i < count; i++) {
         if(strcmp(name, event->name) == 0) {
-            event->handler();
+            event->handler(event->arg);
             if(event_stack->next) {
                 event = (Event *)event_stack->next->data;
             }
