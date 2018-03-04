@@ -15,13 +15,14 @@
  *
  * =====================================================================================
  */
-#include <stdlib.h>
+#include <dbg.h>
 #include <list.h>
+#include <stdlib.h>
 #include "animate.h"
 #include "easing.h"
 #include "gfx.h"
 
-Animation2 *add_animation_attrs(int type, int delay, int from, int to, int time, int loop)
+Animation2 *add_animation_attrs(int type, int delay, int from, int to, int time, int loop, AHFloat (ease_func)(AHFloat))
 {
     Animation2 *animation;
     animation = malloc(sizeof(Animation2));
@@ -46,7 +47,7 @@ Animation2 *add_animation_attrs(int type, int delay, int from, int to, int time,
     for(int i = 0; i <= steps_total; i++) {
         float ratio = (float)i / steps_total;
         // TODO: This needs to come from an argument - function pointer
-        AHFloat ease = LinearInterpolation(ratio);
+        AHFloat ease = ease_func(ratio);
         int step = ((int)floor(delta) * (reverse_ease - ease)) + to;
         steps[i] = step;
     }

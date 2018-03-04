@@ -50,8 +50,25 @@ void shoot()
     size->h = MISSLE_HEIGHT;
 
     // Create animations for needed attributes
-    Animation2 *animation_x = add_animation_attrs(ATTR_X, 0, player->x + (player->w / 2) - 3, player->x + (player->w / 2) - 3, 2000, 0);
-    Animation2 *animation_y = add_animation_attrs(ATTR_Y, 0, player->y, 10, 2000, 0);
+    void *ease_func = LinearInterpolation;
+    Animation2 *animation_x = add_animation_attrs(
+            ATTR_X, // Attribute type
+            1000, // Delay
+            player->x + (player->w / 2) - 3,
+            player->x + (player->w / 2) - 3,
+            1000, // Duration
+            0, // Loop
+            ease_func
+    );
+    Animation2 *animation_y = add_animation_attrs(
+            ATTR_Y, // Attribute type
+            1000, // delay
+            player->y,
+            10,
+            1000, // Duration
+            0, // Loop
+            ease_func
+    );
 
     // Missle id
     Sprite *missle_sprite = NULL;
@@ -71,7 +88,8 @@ void shoot()
     add_animation(missle_sprite, animation_x);
     add_animation(missle_sprite, animation_y);
 
-    add_event_listener(sprite_name, ((void *)animation_complete), ((void *)missle_sprite));
+    void *complete_func = animation_complete;
+    add_event_listener(sprite_name, complete_func, ((void *)missle_sprite));
 
     return;
 
@@ -81,5 +99,4 @@ error:
 
 void animation_complete(Sprite *sprite) {
     sprite->flags |= FLAG_REMOVE;
-    debug("add remove flag");
 }

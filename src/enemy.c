@@ -166,6 +166,7 @@ int add_bezier_animations(Sprite *enemy, Animation *animation)
 error:
     SDL_Quit();
     log_err("Error while initializing player: Shutdown");
+    return 1;
 }
 
 Sprite *add_enemy(Vector2 *animation_points)

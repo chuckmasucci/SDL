@@ -71,19 +71,11 @@ void render()
             for(j = 0; j < queue_count; j++) {
                 render_sprite = (Sprite*)current_node->data;
 
-                /*if(strstr(render_sprite->id, "Background") != NULL) {*/
-                    /*update_background(render_sprite->size);*/
-                /*}*/
-
                 // Animation
                 int animation_count = List_count(render_sprite->animations);
                 if(animation_count > 0) {
                     animate(render_sprite);
                 }
-                /*if(render_sprite->frames > 0 || render_sprite->flags & FLAG_ANIMATING && render_sprite->animation) {*/
-                    /*animate(render_sprite);*/
-                /*}*/
-
                 // Cleanup
                 if(render_sprite->flags & FLAG_REMOVE) {
                     updated_node = cleanup_sprite(render_sprite, &renderer_current, current_node->id);
@@ -109,10 +101,6 @@ void render()
         }
     }
     present();
-}
-
-void animate_default(Sprite *sprite)
-{
 }
 
 void animate_sprite_frames(Sprite *sprite)
@@ -145,34 +133,38 @@ void animate(Sprite *sprite)
     for(int i = 0; i < animation_count; i++) {
         animation = current_node->data;
 
+        int time_current = SDL_GetTicks();
+        int time_elapsed_seconds = (time_current - animation->time_start);
+
+        if(time_elapsed_seconds < animation->delay) {
+            return;
+        }
+
         if(animation->current_step < animation->steps_total) {
             animation->current_step++;
         }
 
         switch(animation->type) {
             case ATTR_X:
-                /*debug("%s: x delay: %d, to: %d, from: %d, value: %d, current_step: %d", sprite->id, animation->delay, animation->to, animation->from, animation->steps[animation->current_step], animation->current_step);*/
                 sprite->size->x = animation->steps[animation->current_step];
                 break;
             case ATTR_Y:
-                /*debug("%s: y delay: %d, to: %d, from: %d, value: %d, current_step: %d", sprite->id, animation->delay, animation->to, animation->from, animation->steps[animation->current_step], animation->current_step);*/
                 sprite->size->y = animation->steps[animation->current_step];
-                debug("y: %d", sprite->size->y);
                 break;
         }
 
         if(animation->time_start == 0 && animation->time_end == 0) {
             animation->time_start = SDL_GetTicks();
             animation->time_end = animation->delay + animation->time_start + animation->time;
+            debug("%d | time start: %d", animation->type, animation->time_start);
         }
 
         next_node = current_node->next;
 
-        if(SDL_GetTicks() >= animation->time_end) {
+        if(animation->current_step == animation->steps_total) {
             next_node = List_remove(&sprite->animations, current_node->id);
             if(!next_node) {
                 sprite->animations = NULL;
-                debug("dispatch event");
                 dispatch_event(sprite->id);
                 break;
             }

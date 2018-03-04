@@ -5,6 +5,7 @@
 #define STEPS 100
 #define SPRITE_FRAME_DELAY 100
 
+#include "easing.h"
 #include <bezier.h>
 #include <list.h>
 
@@ -23,34 +24,34 @@ typedef enum AnimationAttribute {
 } AnimationAttribute;
 
 typedef struct Animation2 {
-    uint delay;
+    int delay;
     int from;
     int to;
-    uint loop;
-    uint time;
-    uint type;
-    uint current_step;
-    uint steps_total;
+    int loop;
+    int time;
+    int type;
+    int current_step;
+    int steps_total;
     int *steps;
-    uint time_start;
-    uint time_end;
+    int time_start;
+    int time_end;
 } Animation2;
 
 typedef struct Animation {
     char *id;
     int current_step;
     int current_step_xy;
-    uint delay;
-    uint is_animating;
-    uint from_alpha;
+    int delay;
+    int is_animating;
+    int from_alpha;
     int from_x;
-    uint from_y;
-    uint to_alpha;
+    int from_y;
+    int to_alpha;
     int to_x;
     int to_y;
     int *steps_x;
     int *steps_y;
-    uint time;
+    int time;
     int steps_alpha[STEPS];
     enum AnimationType type;
 } Animation;
@@ -66,6 +67,6 @@ typedef struct AnimationBezier {
     Vector2 points[STEPS];
 } AnimationBezier;
 
-Animation2 *add_animation_attrs(int type, int delay, int from, int to, int time, int loop);
+Animation2 *add_animation_attrs(int type, int delay, int from, int to, int time, int loop, AHFloat (ease_func)(AHFloat));
 
 #endif

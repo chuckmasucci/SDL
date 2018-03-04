@@ -76,7 +76,7 @@ Node *cleanup_sprite(Sprite *sprite, Node **render_index, int node_id)
 
 void destroy_sprite(Sprite *sprite)
 {
-    debug("destroy sprite");
+    /*debug("destroy sprite");*/
     if(sprite->id) {
         free(sprite->id);
     }

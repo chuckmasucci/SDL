@@ -41,25 +41,35 @@ int main(int argc, char *argv[])
     Uint64 last_time = SDL_GetPerformanceCounter();
     Uint32 start_time = SDL_GetTicks();
     int runtime = 0;
+    int runtime_prev = 0;
+    int x = 1;
 
     // The loop
     while(running) {
         // Timing variables
         freq = SDL_GetPerformanceFrequency();
         now = SDL_GetPerformanceCounter();
+        runtime_prev = runtime;
         runtime = (SDL_GetTicks() - start_time) / 1000;
         delta = ((now - last_time) / freq);
-        /*debug("runtime: %d", runtime);*/
+        /*if(runtime > runtime_prev) {*/
+            /*debug("%d | runtime: %d", x, runtime);*/
+            /*x = 1;*/
+        /*} else {*/
+            /*x++;*/
+        /*}*/
 
         SDL_Event event;
         if(SDL_PollEvent(&event)) {
             switch(event.type) {
                 case SDL_KEYDOWN:
                     switch(event.key.keysym.sym) {
+                        case SDLK_h:
                         case SDLK_LEFT:
                             is_left_key_down = 1;
                             move_direction = -1;
                             break;
+                        case SDLK_l:
                         case SDLK_RIGHT:
                             is_right_key_down = 1;
                             move_direction = 1;
@@ -74,9 +84,11 @@ int main(int argc, char *argv[])
                     break;
                 case SDL_KEYUP:
                     switch (event.key.keysym.sym) {
+                        case SDLK_h:
                         case SDLK_LEFT:
                             is_left_key_down = 0;
                             break;
+                        case SDLK_l:
                         case SDLK_RIGHT:
                             is_right_key_down = 0;
                             break;
@@ -90,12 +102,13 @@ int main(int argc, char *argv[])
         }
 
         // Calculations for FPS maintenance
-        int fps = 1000/FPS;
+        float fps = 1000.00/(float)FPS;
         int delta_ms = (int)(delta * 1000);
-        int delay = fps - delta_ms;
-        if(delay > 0) {
-            SDL_Delay(delay);
-        }
+        float delay = fps - delta_ms;
+        /*debug("fps: %f | delta: %d | delay: %f", fps, delta_ms, delay);*/
+        /*if(delay > 0) {*/
+            SDL_Delay(fps);
+        /*}*/
 
         // Update the timing variable
         last_time = now;
