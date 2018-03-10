@@ -26,8 +26,6 @@ Sprite *render_sprite = NULL;
 
 int speed2 = 10;
 
-int get_total_animation_duration(Node *animations);
-
 int initialize_render()
 {
     renderers[0] = &render_index_1;
@@ -76,6 +74,7 @@ void render()
                 if(animation_count > 0) {
                     animate(render_sprite);
                 }
+
                 // Cleanup
                 if(render_sprite->flags & FLAG_REMOVE) {
                     updated_node = cleanup_sprite(render_sprite, &renderer_current, current_node->id);
@@ -87,11 +86,7 @@ void render()
                 }
 
                 // Set the next current node
-                if(!updated_node) {
-                    current_node = current_node->next;
-                } else {
-                    current_node = updated_node;
-                }
+                current_node = (!updated_node) ? current_node->next : updated_node;
 
                 if(render_sprite) {
                     int flip_texture = (render_sprite->flags & FLAG_FLIPPED) ? 1 : 0;
@@ -126,24 +121,37 @@ void animate(Sprite *sprite)
     if(sprite->frames > 0) {
         animate_sprite_frames(sprite);
     }
+
     Animation2 *animation = NULL;
+
+    // Get the amount of attached animations
     int animation_count = List_count(animations);
-    int duration_total = get_total_animation_duration(animations);
 
     for(int i = 0; i < animation_count; i++) {
+        // Get the animation struct
         animation = current_node->data;
 
+        // Timing variables
         int time_current = SDL_GetTicks();
         int time_elapsed_seconds = (time_current - animation->time_start);
 
+        // Set the animation timing variables
+        if(animation->time_start == 0 && animation->time_end == 0) {
+            animation->time_start = SDL_GetTicks();
+            animation->time_end = animation->delay + animation->time_start + animation->time;
+        }
+
+        // Don't animate until the delay time has completed
         if(time_elapsed_seconds < animation->delay) {
             return;
         }
 
+        // Get the current index for the animation array
         if(animation->current_step < animation->steps_total) {
             animation->current_step++;
         }
 
+        // Animate
         switch(animation->type) {
             case ATTR_X:
                 sprite->size->x = animation->steps[animation->current_step];
@@ -153,14 +161,10 @@ void animate(Sprite *sprite)
                 break;
         }
 
-        if(animation->time_start == 0 && animation->time_end == 0) {
-            animation->time_start = SDL_GetTicks();
-            animation->time_end = animation->delay + animation->time_start + animation->time;
-            debug("%d | time start: %d", animation->type, animation->time_start);
-        }
-
+        // Get the next list node
         next_node = current_node->next;
 
+        // When animation is complete dispatch event
         if(animation->current_step == animation->steps_total) {
             next_node = List_remove(&sprite->animations, current_node->id);
             if(!next_node) {
@@ -172,25 +176,6 @@ void animate(Sprite *sprite)
 
         current_node = next_node;
     }
-}
-
-int get_total_animation_duration(Node *animations)
-{
-    int animation_count = List_count(animations);
-    Node *current_animation = animations;
-    int max = 0;
-
-    for(int i = 0; i < animation_count; i++) {
-        Animation2 *animation = ((Animation2 *)current_animation->data);
-        int current_duration = animation->delay + animation->time;
-
-        if(current_duration > max) {
-            max = current_duration;
-        }
-        current_animation = animations->next;
-    }
-
-    return max;
 }
 
 void destroy_render_queue()

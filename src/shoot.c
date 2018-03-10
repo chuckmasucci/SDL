@@ -49,25 +49,24 @@ void shoot()
     size->w = MISSLE_WIDTH;
     size->h = MISSLE_HEIGHT;
 
-    // Create animations for needed attributes
-    void *ease_func = LinearInterpolation;
+    void *ease_func = QuadraticEaseOut;
+
+    int *steps_x = get_linear_points(player->x + (player->w / 2) - 3, player->x + (player->w / 2) - 3, 1000, ease_func);
     Animation2 *animation_x = add_animation_attrs(
             ATTR_X, // Attribute type
-            1000, // Delay
-            player->x + (player->w / 2) - 3,
-            player->x + (player->w / 2) - 3,
+            0, // Delay
+            steps_x,
             1000, // Duration
-            0, // Loop
-            ease_func
+            0 // Loop
     );
+
+    int *steps_y = get_linear_points(player->y, 10, 1000, ease_func);
     Animation2 *animation_y = add_animation_attrs(
             ATTR_Y, // Attribute type
-            1000, // delay
-            player->y,
-            10,
+            0, // delay
+            steps_y,
             1000, // Duration
-            0, // Loop
-            ease_func
+            0 // Loop
     );
 
     // Missle id

@@ -22,37 +22,59 @@
 #include "easing.h"
 #include "gfx.h"
 
-Animation2 *add_animation_attrs(int type, int delay, int from, int to, int time, int loop, AHFloat (ease_func)(AHFloat))
+Animation2 *add_animation_attrs(int type, int delay, int *steps, int duration, int loop)
 {
     Animation2 *animation;
     animation = malloc(sizeof(Animation2));
     animation->delay = delay;
-    animation->from = from;
-    animation->to = to;
-    animation->time = time;
+    animation->time = duration;
     animation->type = type;
     animation->time_start = 0;
     animation->time_end = 0;
-
     animation->current_step = 0;
-    animation->steps = 0;
 
-    int delta = from - to;
-    int steps_total = FPS * (time / 1000);
-    int *steps = malloc(steps_total * sizeof(int));
+    int steps_total = FPS * (duration / 1000);
     animation->steps = malloc(steps_total * sizeof(int));
-
-    int reverse_ease = (from < to) ? 0 : 1;
-
-    for(int i = 0; i <= steps_total; i++) {
-        float ratio = (float)i / steps_total;
-        // TODO: This needs to come from an argument - function pointer
-        AHFloat ease = ease_func(ratio);
-        int step = ((int)floor(delta) * (reverse_ease - ease)) + to;
-        steps[i] = step;
-    }
     animation->steps = steps;
     animation->steps_total = steps_total;
 
     return animation;
 }
+
+int *get_linear_points(unsigned int from, unsigned int to, unsigned int duration, AHFloat (ease_func)(AHFloat))
+{
+    int delta = from - to;
+    int steps_total = FPS * (duration / 1000);
+    int *steps = malloc(sizeof(int) * steps_total);
+
+    int reverse_ease = (from < to) ? 0 : 1;
+
+    for(int i = 0; i <= steps_total; i++) {
+        float ratio = (float)i / steps_total;
+        AHFloat ease = ease_func(ratio);
+        int step = ((int)floor(delta) * (reverse_ease - ease)) + to;
+        steps[i] = step;
+    }
+
+    return steps;
+}
+
+int *get_bezier_points(CubicBezierPoints points, unsigned int duration, AHFloat (ease_func)(AHFloat), int type)
+{
+    int steps_total = FPS * (duration / 1000);
+    int *steps = malloc(sizeof(int) * steps_total);
+
+    for(int i = 0; i < steps_total; i++) {
+        float t = (float)i / (float)steps_total;
+        AHFloat p = CubicEaseInOut(t);
+        Vector2 point = getCubicBezierPoint(p, points.p0, points.p1, points.p2, points.p3);
+        if(type == ATTR_X) {
+            steps[i] = (int)point.x;
+        } else if(type == ATTR_Y) {
+            steps[i] = (int)point.y;
+        }
+    }
+
+    return steps;
+}
+

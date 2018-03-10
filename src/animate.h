@@ -25,8 +25,6 @@ typedef enum AnimationAttribute {
 
 typedef struct Animation2 {
     int delay;
-    int from;
-    int to;
     int loop;
     int time;
     int type;
@@ -36,6 +34,13 @@ typedef struct Animation2 {
     int time_start;
     int time_end;
 } Animation2;
+
+typedef struct CubicBezierPoints {
+    Vector2 p0;
+    Vector2 p1;
+    Vector2 p2;
+    Vector2 p3;
+} CubicBezierPoints;
 
 typedef struct Animation {
     char *id;
@@ -67,6 +72,8 @@ typedef struct AnimationBezier {
     Vector2 points[STEPS];
 } AnimationBezier;
 
-Animation2 *add_animation_attrs(int type, int delay, int from, int to, int time, int loop, AHFloat (ease_func)(AHFloat));
+Animation2 *add_animation_attrs(int type, int delay, int *steps, int time, int loop);
+int *get_linear_points(unsigned int from, unsigned int to, unsigned int duration, AHFloat (ease_func)(AHFloat));
+int *get_bezier_points(CubicBezierPoints points, unsigned int duration, AHFloat (ease_func)(AHFloat), int type);
 
 #endif
