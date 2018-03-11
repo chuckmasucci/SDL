@@ -4,10 +4,10 @@ BUILD=build
 
 # Includes
 INCLUDE_SDL=/usr/include/SDL2
-INCLUDE_DARRAY=/home/chuck/.local/lib/chuck/darray
-INCLUDE_DBG=/home/chuck/.local/lib/chuck/dbg
-INCLUDE_LIST=/home/chuck/.local/lib/chuck/list
-INCLUDE_BEZIER=/home/chuck/.local/lib/chuck/bezier
+INCLUDE_DARRAY=/home/chuck/.local/lib/darray
+INCLUDE_DBG=/home/chuck/.local/lib/dbg
+INCLUDE_LIST=/home/chuck/.local/lib/list
+INCLUDE_BEZIER=/home/chuck/.local/lib/bezier
 INCLUDES=-I$(INCLUDE_DBG) -I$(INCLUDE_LIST) -I$(INCLUDE_DARRAY) -I$(INCLUDE_BEZIER) -I$(INCLUDE_SDL)
 LIB_DIRS=-L$(INCLUDE_DBG) -L$(INCLUDE_LIST) -L$(INCLUDE_DARRAY) -L$(INCLUDE_BEZIER)
 
