@@ -77,4 +77,3 @@ int *get_bezier_points(CubicBezierPoints points, unsigned int duration, AHFloat 
 
     return steps;
 }
-

@@ -1,6 +1,5 @@
 CC=gcc
 SRC=src
-BUILD=build
 
 # Includes
 INCLUDE_SDL=/usr/include/SDL2
