@@ -12,6 +12,7 @@ int initialize_gfx()
   check(window != NULL, "Could not create window: %s", SDL_GetError());
 
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+  // renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
   check(renderer != NULL, "Could not create renderer: %s", SDL_GetError());
 
   return 0;

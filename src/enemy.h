@@ -27,11 +27,10 @@
 #define ENEMY_WIDTH 74
 #define ENEMY_HEIGHT 95
 #define ENEMY_COUNT 8
-// Columns should not be higher than enemy count
-#define ENEMY_COLUMNS 4
+#define ENEMY_COLUMNS 4 // Columns should not be higher than enemy count
 #define ENEMY_ROWS (int)ceil((float)ENEMY_COUNT / (float)ENEMY_COLUMNS)
 
 void initialize_enemies();
-Sprite *add_enemy(Vector2 *animation_points);
+Sprite *add_enemy(Vector2 *animation_points, int pos);
 
 #endif

@@ -41,6 +41,10 @@ int add_event_listener(char *name, void (*handler)(void *), void *arg)
 int dispatch_event(char *name)
 {
     int count = List_count(event_stack);
+    if(count == 0) {
+        return 0;
+    }
+
     Node *node_current = event_stack;
     Event *event = (Event *)event_stack->data;
     for(int i = 0; i < count; i++) {

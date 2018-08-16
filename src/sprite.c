@@ -11,7 +11,6 @@
 Sprite *create_sprite(char *id, char *path, int frames, SDL_Rect *size, SDL_Rect *mask, void *animation)
 {
     Sprite *sprite = malloc(sizeof(Sprite));
-    /*sprite->animations = malloc(sizeof(Node));*/
     sprite->animations = NULL;
     sprite->animation = animation;
     sprite->alpha = ALPHA_MAX;
@@ -39,7 +38,6 @@ SDL_Texture *create_sprite_texture(SDL_Renderer *renderer, char *imgPath, int al
 
     SDL_Texture *sprite_texture = SDL_CreateTextureFromSurface(renderer, sprite_surface);
     check(sprite_texture, "Could not create texture: %s", SDL_GetError());
-
     SDL_SetTextureAlphaMod(sprite_texture, alpha);
 
     SDL_FreeSurface(sprite_surface);

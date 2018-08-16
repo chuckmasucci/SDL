@@ -1,0 +1,36 @@
+[
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-I/home/chuck/.local/lib/dbg",
+            "-I/home/chuck/.local/lib/list",
+            "-I/home/chuck/.local/lib/darray",
+            "-I/home/chuck/.local/lib/bezier",
+            "-I/usr/include/SDL2",
+            "-ggdb",
+            "-o",
+            "src/spacegame.o",
+            "src/spacegame.c"
+        ],
+        "directory": "/home/chuck/Projects/spacegame/c",
+        "file": "src/spacegame.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-I/home/chuck/.local/lib/dbg",
+            "-I/home/chuck/.local/lib/list",
+            "-I/home/chuck/.local/lib/darray",
+            "-I/home/chuck/.local/lib/bezier",
+            "-I/usr/include/SDL2",
+            "-ggdb",
+            "-o",
+            "src/background.o",
+            "src/background.c"
+        ],
+        "directory": "/home/chuck/Projects/spacegame/c",
+        "file": "src/background.c"
+    }
+]

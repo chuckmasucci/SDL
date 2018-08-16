@@ -75,5 +75,7 @@ typedef struct AnimationBezier {
 Animation2 *add_animation_attrs(int type, int delay, int *steps, int time, int loop);
 int *get_linear_points(unsigned int from, unsigned int to, unsigned int duration, AHFloat (ease_func)(AHFloat));
 int *get_bezier_points(CubicBezierPoints points, unsigned int duration, AHFloat (ease_func)(AHFloat), int type);
+void cleanup_animation(Animation2 *animation);
+void cleanup_animations(Node **animations);
 
 #endif

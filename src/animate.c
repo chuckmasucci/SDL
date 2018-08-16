@@ -34,7 +34,6 @@ Animation2 *add_animation_attrs(int type, int delay, int *steps, int duration, i
     animation->current_step = 0;
 
     int steps_total = FPS * (duration / 1000);
-    animation->steps = malloc(steps_total * sizeof(int));
     animation->steps = steps;
     animation->steps_total = steps_total;
 
@@ -46,10 +45,11 @@ int *get_linear_points(unsigned int from, unsigned int to, unsigned int duration
     int delta = from - to;
     int steps_total = FPS * (duration / 1000);
     int *steps = malloc(sizeof(int) * steps_total);
+    check_mem(steps);
 
     int reverse_ease = (from < to) ? 0 : 1;
 
-    for(int i = 0; i <= steps_total; i++) {
+    for(int i = 0; i < steps_total; i++) {
         float ratio = (float)i / steps_total;
         AHFloat ease = ease_func(ratio);
         int step = ((int)floor(delta) * (reverse_ease - ease)) + to;
@@ -57,6 +57,10 @@ int *get_linear_points(unsigned int from, unsigned int to, unsigned int duration
     }
 
     return steps;
+
+error:
+    SDL_Quit();
+    log_err("Error while initializing animate: Steps");
 }
 
 int *get_bezier_points(CubicBezierPoints points, unsigned int duration, AHFloat (ease_func)(AHFloat), int type)
@@ -76,4 +80,10 @@ int *get_bezier_points(CubicBezierPoints points, unsigned int duration, AHFloat 
     }
 
     return steps;
+}
+
+void cleanup_animation(Animation2 *animation)
+{
+    free(animation->steps);
+    free(animation);
 }

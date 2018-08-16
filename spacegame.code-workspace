@@ -1,0 +1,42 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "/home/chuck/.local/lib"
+		},
+		{
+			"path": "/home/chuck/Projects/sandbox/c/linkedlist"
+		},
+		{
+			"path": "/home/chuck/Projects/spacegame2/c"
+		},
+		{
+			"path": "/home/chuck/Downloads/code"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"background.h": "c",
+			"enemy.h": "c",
+			"array": "c",
+			"string_view": "c",
+			"stdlib.h": "c",
+			"spacegame.h": "c",
+			"time.h": "c"
+		},
+		"cSpell.words": [
+			"anim",
+			"bezier",
+			"cubic",
+			"froggies",
+			"get",
+			"point",
+			"presentvsync",
+			"renderer",
+			"sdl"
+		],
+		"cSpell.enabled": false
+	}
+}

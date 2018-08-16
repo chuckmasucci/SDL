@@ -75,7 +75,7 @@ void shoot()
     check_mem(sprite_name);
     sprintf(sprite_name, "Missle%d", spriteid);
 
-    // Incriment id
+    // Increment id
     spriteid++;
 
     // Create the sprite and add it to the render
